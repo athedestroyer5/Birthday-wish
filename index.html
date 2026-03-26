@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Palak</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <!-- Sprinkles/Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        /* CSS Variables for Theme */
+        :root {
+            --cherry-red: #D2042D;
+            --cherry-dark: #99001f;
+            --black-lavender-1: #1a1124;
+            --black-lavender-2: #2d1e3e;
+            --text-light: #f5f0fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--black-lavender-1), var(--black-lavender-2));
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Twinkling Stars */
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            z-index: 0;
+            animation: twinkle infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px white; }
+        }
+
+        /* Intro Screen */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--black-lavender-1), var(--black-lavender-2));
+            z-index: 100;
+            transition: opacity 1s ease-out;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .intro-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .btn {
+            background: var(--cherry-red);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(210, 4, 45, 0.4);
+            transition: all 0.3s ease;
+            animation: bounce 2s infinite;
+            position: relative;
+            z-index: 20;
+        }
+
+        .btn:hover {
+            background: var(--cherry-dark);
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(210, 4, 45, 0.6);
+        }
+
+        /* Main Screen */
+        #main-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* 3D Beautiful Photo Frame */
+        .photo-container {
+            margin-top: 20px;
+            position: relative;
+            perspective: 1000px; /* Gives the 3D depth */
+            animation: dropDown 1.5s ease-out;
+            z-index: 15;
+        }
+
+        .flip-box-inner {
+            width: 250px;
+            height: 250px;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(210, 4, 45, 0.5);
+            animation: pulseFrame 3s infinite alternate;
+        }
+
+        /* Triggers the flip on hover */
+        .photo-container:hover .flip-box-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-box-front, .flip-box-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 50%;
+            border: 5px solid var(--cherry-red);
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .flip-box-front img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* The back of the photo */
+        .flip-box-back {
+            transform: rotateY(180deg);
+            background: var(--cherry-red);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Typography */
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            margin-top: 20px;
+            color: var(--cherry-red);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        .nickname {
+            font-size: 1.5rem;
+            color: #bfa4d8;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            z-index: 10;
+        }
+
+        .message-box {
+            background: rgba(45, 30, 62, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(210, 4, 45, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            max-width: 600px;
+            text-align: center;
+            margin: 20px 0;
+            line-height: 1.6;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        /* Secret final message design */
+        #secret-message {
+            background: linear-gradient(135deg, var(--cherry-red), var(--cherry-dark));
+            color: white;
+            border: 2px solid gold;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+            font-size: 1.3rem;
+        }
+
+        #secret-message h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: gold;
+        }
+
+        /* Gifts Section */
+        .gifts-section {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 40px;
+            z-index: 10;
+        }
+
+        .gift-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--cherry-red);
+            border-radius: 15px;
+            width: 220px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gift-card:hover {
+            transform: translateY(-10px);
+            background: rgba(210, 4, 45, 0.1);
+            box-shadow: 0 10px 20px rgba(210, 4, 45, 0.3);
+        }
+
+        .gift-icon {
+            margin-bottom: 15px;
+        }
+
+        .gift-icon img {
+            width: 70px;
+            height: auto;
+            animation: bounce 3s infinite;
+        }
+
+        .gift-content {
+            display: none;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            color: #e0d5eb;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes dropDown {
+            0% { transform: translateY(-50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-7px); }
+        }
+
+        @keyframes pulseFrame {
+            0% { box-shadow: 0 0 20px rgba(210, 4, 45, 0.4); }
+            100% { box-shadow: 0 0 50px rgba(210, 4, 45, 0.8); }
+        }
+
+        /* Falling Roses */
+        .rose {
+            position: fixed;
+            top: -50px;
+            z-index: 1;
+            user-select: none;
+            pointer-events: none;
+            animation-timing-function: linear;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Intro Screen -->
+    <div id="intro-screen">
+        <div class="intro-text">Hey beautiful, I made a little gift for you!</div>
+        <button class="btn" onclick="startExperience()">Let's begin</button>
+    </div>
+
+    <!-- Main Experience Screen -->
+    <div id="main-screen">
+        
+        <!-- 3D Beautiful Frame for Palak Photo -->
+        <div class="photo-container">
+            <div class="flip-box-inner">
+                <!-- Front: Her Photo -->
+                <div class="flip-box-front">
+                    <!-- REPLACE THE LINK BELOW WITH HER ACTUAL PHOTO LINK -->
+                    <img src="tata.jpg" alt="Palak">
+                </div>
+                <!-- Back: Hidden Message -->
+                <div class="flip-box-back">
+                    Cutest!
+                </div>
+            </div>
+        </div>
+
+        <h1>Happy Birthday Palak</h1>
+        <div class="nickname">aka tatatae0</div>
+
+        <div class="message-box">
+            To the most amazing best friend anyone could ask for. Thank you for always bringing so much positivity and joy into my life. I am so lucky to have a brilliant friend like you by my side. Wishing you endless success, good health, and happiness today and always.
+        </div>
+
+        <div class="message-box">
+            I have kept some special virtual gifts for you below. Go ahead and click them to see what's inside!
+        </div>
+
+        <!-- Interactive Gifts -->
+        <div class="gifts-section">
+            <div class="gift-card" onclick="openGift(this)">
+                <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
+                <div class="btn" style="padding: 10px 20px; font-size: 1rem;">Open Gift 1</div>
+                <div class="gift-content">A box full of virtual chocolates and massive respect for the great person you are!</div>
+            </div>
+
+            <div class="gift-card" onclick="openGift(this)">
+                <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
+                <div class="btn" style="padding: 10px 20px; font-size: 1rem;">Open Gift 2</div>
+                <div class="gift-content">Endless blessings for your bright future and career. May you achieve all your goals this year!</div>
+            </div>
+
+            <div class="gift-card" onclick="openGift(this)">
+                <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
+                <div class="btn" style="padding: 10px 20px; font-size: 1rem;">Open Gift 3</div>
+                <div class="gift-content">A solid promise to always support you and stand by you as your truest best friend, no matter what.</div>
+            </div>
+
+            <!-- 4th Gift -->
+            <div class="gift-card" onclick="openGift(this)">
+                <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
+                <div class="btn" style="padding: 10px 20px; font-size: 1rem;">Open Gift 4</div>
+                <div class="gift-content">You are the best online friend I have ever met!</div>
+            </div>
+        </div>
+
+        <!-- Secret Final Message (Hidden initially) -->
+        <div id="secret-message" class="message-box" style="display: none;">
+            <h2> SURPRISE! </h2>
+            You opened all the gifts! Here is a massive virtual hug from me. Never forget how incredibly awesome you are. Enjoy your special day to the absolute fullest!
+        </div>
+
+    </div>
+
+    <script>
+        // Track how many gifts are opened
+        let openedGiftsCount = 0;
+
+        // Function to generate Twinkling Stars in background
+        function createStars() {
+            const starContainer = document.createElement('div');
+            starContainer.style.position = 'fixed';
+            starContainer.style.top = '0';
+            starContainer.style.left = '0';
+            starContainer.style.width = '100vw';
+            starContainer.style.height = '100vh';
+            starContainer.style.zIndex = '0';
+            starContainer.style.pointerEvents = 'none';
+            document.body.appendChild(starContainer);
+
+            for (let i = 0; i < 80; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                starContainer.appendChild(star);
+            }
+        }
+
+        // Play Pop Sound
+        function playPopSound() {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+
+            gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.1);
+        }
+
+        // Big Confetti Explosion (For start and the final secret message)
+        function shootBigConfetti() {
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors:['#D2042D', '#bfa4d8', '#ffffff', '#99001f', '#ffd700']
+            });
+        }
+
+        // Small Confetti Burst (For opening individual gifts)
+        function shootSmallConfetti() {
+            confetti({
+                particleCount: 50,
+                spread: 60,
+                origin: { y: 0.8 },
+                colors:['#D2042D', '#ffffff']
+            });
+        }
+
+        // Transition from Intro to Main Screen
+        function startExperience() {
+            playPopSound();
+            shootBigConfetti();
+            createStars(); // Spawn the twinkling stars
+
+            const intro = document.getElementById('intro-screen');
+            const main = document.getElementById('main-screen');
+            
+            intro.style.opacity = '0';
+            setTimeout(() => {
+                intro.style.display = 'none';
+                main.style.display = 'flex';
+                startFallingRoses();
+            }, 1000);
+        }
+
+        // Open Gift Function (Handles Individual opening + Secret final message trigger)
+        function openGift(card) {
+            const button = card.querySelector('.btn');
+            const content = card.querySelector('.gift-content');
+            
+            if (content.style.display !== 'block') {
+                content.style.display = 'block';
+                button.style.display = 'none';
+                
+                playPopSound(); 
+                shootSmallConfetti(); // Fire small confetti burst when gift is opened
+                
+                // Track opened gifts
+                if (!card.classList.contains('opened')) {
+                    card.classList.add('opened');
+                    openedGiftsCount++;
+
+                    // Check if all 4 gifts are opened
+                    if (openedGiftsCount === 4) {
+                        setTimeout(() => {
+                            const secretMsg = document.getElementById('secret-message');
+                            secretMsg.style.display = 'block';
+                            secretMsg.style.animation = 'fadeIn 2s ease-in-out';
+                            
+                            shootBigConfetti(); // Massive explosion
+                            playPopSound();     // Final Pop sound
+                            
+                            // Smoothly scroll down so she sees the surprise message
+                            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                        }, 1000); // Wait 1 second after opening the last gift to trigger
+                    }
+                }
+            }
+        }
+
+        // Animated Falling Roses Logic (Using your original image 'rose2.jpg')
+        function startFallingRoses() {
+            function createRose() {
+                const rose = document.createElement('div');
+                rose.classList.add('rose');
+                
+                rose.innerHTML = '<img src="rose2.jpg" style="width:40px; height:auto;">';
+                
+                rose.style.left = Math.random() * 100 + 'vw';
+                rose.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                
+                const duration = Math.random() * 4 + 4; 
+                rose.style.animation = 'fall ' + duration + 's linear forwards';
+                
+                document.body.appendChild(rose);
+                
+                setTimeout(() => {
+                    rose.remove();
+                }, duration * 1000);
+            }
+            
+            setInterval(createRose, 400);
+        }
+    </script>
+</body>
+</html>
