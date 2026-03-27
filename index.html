@@ -19,7 +19,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #000; /* Starts pitch black */
+            background-color: #000; 
             color: var(--text-light);
             overflow-x: hidden;
             min-height: 100vh;
@@ -30,7 +30,7 @@
             background: linear-gradient(135deg, var(--black-lavender-1), var(--black-lavender-2));
         }
 
-        /* Twinkling Stars (Added Back!) */
+        /* Twinkling Stars */
         .star {
             position: absolute;
             background-color: white;
@@ -110,7 +110,7 @@
             border: 1px solid rgba(210, 4, 45, 0.3); border-radius: 15px;
             padding: 25px; max-width: 600px; text-align: center; margin: 15px 0;
             line-height: 1.6; font-size: 1.1rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            display: none; /* Hidden until typed */
+            display: none; 
             min-height: 80px;
         }
 
@@ -126,11 +126,22 @@
         }
         .cake::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 15px; background: #fff; border-radius: 10px 10px 0 0; }
         .candle-container { display: flex; justify-content: space-around; position: absolute; width: 100%; top: -30px; padding: 0 20px;}
-        .candle { width: 12px; height: 35px; background: repeating-linear-gradient(45deg, white, white 5px, var(--cherry-red) 5px, var(--cherry-red) 10px); position: relative; border-radius: 3px; }
+        
+        /* Made entire candle clickable for better mobile tapping */
+        .candle { width: 12px; height: 35px; background: repeating-linear-gradient(45deg, white, white 5px, var(--cherry-red) 5px, var(--cherry-red) 10px); position: relative; border-radius: 3px; cursor: pointer; }
+        
         .flame {
             width: 14px; height: 20px; background: gold; border-radius: 50% 50% 20% 20%;
             position: absolute; top: -22px; left: -1px; animation: flicker 0.5s infinite alternate;
-            box-shadow: 0 0 15px gold, 0 0 30px orange; transition: opacity 0.5s ease-out;
+            box-shadow: 0 0 15px gold, 0 0 30px orange; 
+            transition: all 0.3s ease-out;
+        }
+        
+        /* THE FIX: This class forces the animation to stop and instantly hides the flame */
+        .flame.extinguished {
+            animation: none !important;
+            opacity: 0 !important;
+            transform: scale(0) !important;
         }
 
         /* Gifts Section */
@@ -140,7 +151,6 @@
         .gift-icon img { width: 70px; animation: bounce 3s infinite; }
         .gift-content { display: none; margin-top: 15px; font-size: 0.95rem; color: #e0d5eb; }
 
-        /* General Button */
         .btn {
             background: var(--cherry-red); color: white; border: none; padding: 10px 20px;
             font-size: 1.1rem; border-radius: 30px; cursor: pointer; font-weight: 600;
@@ -162,15 +172,15 @@
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-15px); } 60% { transform: translateY(-7px); } }
         @keyframes pulseFrame { 0% { box-shadow: 0 0 20px rgba(210, 4, 45, 0.4); } 100% { box-shadow: 0 0 50px rgba(210, 4, 45, 0.8); } }
         @keyframes flicker { 0% { transform: scale(1) rotate(-2deg); opacity: 0.9; } 100% { transform: scale(1.1) rotate(2deg); opacity: 1; } }
-        @keyframes fallInfinite { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0.3; } }
-        .rose-particle { position: fixed; z-index: 1; pointer-events: none; user-select: none; top: -10vh; }
+        @keyframes fallInfinite { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0.6; } }
+        .party-item { position: fixed; z-index: 1; pointer-events: none; user-select: none; top: -10vh; }
     </style>
 </head>
 <body>
 
-    <!-- Background Audio -->
+    <!-- Cheerful, Friendly Acoustic Ukulele Track -->
     <audio id="bg-music" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
+        <source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_bb630cc098.mp3" type="audio/mpeg">
     </audio>
 
     <!-- Dark Room Switch Screen -->
@@ -195,19 +205,19 @@
 
         <div class="message-box" id="msg1" data-text="To one of the best friends I could ever ask for. Thank you for always bringing so much positivity and joy into my life. I'm really glad to have a friend like you. Wishing you endless success, good health, and happiness today and always."></div>
 
-        <div class="message-box" id="msg2" data-text="I have kept some special virtual gifts for you below. But first... you need to make a wish and blow out the candles!"></div>
+        <div class="message-box" id="msg2" data-text="I have kept some special virtual gifts for you below. But first... make a wish and tap the candles to blow them out!"></div>
 
         <!-- Interactive Birthday Cake -->
         <div id="cake-section">
             <div class="cake">
                 <div class="candle-container">
-                    <div class="candle"><div class="flame"></div></div>
-                    <div class="candle"><div class="flame"></div></div>
-                    <div class="candle"><div class="flame"></div></div>
+                    <!-- onclick moved to the entire candle for a bigger tap target -->
+                    <div class="candle" onclick="blowOutCandle(this)"><div class="flame"></div></div>
+                    <div class="candle" onclick="blowOutCandle(this)"><div class="flame"></div></div>
+                    <div class="candle" onclick="blowOutCandle(this)"><div class="flame"></div></div>
                 </div>
             </div>
-            <p id="cake-instruction" style="margin-bottom: 15px; font-size: 1.1rem; position: relative; z-index: 20;">Make a wish! 🤫</p>
-            <button class="btn" id="mic-btn" onclick="enableMicrophone()">Light the Candles & Blow</button>
+            <p id="cake-instruction" style="margin-bottom: 15px; font-size: 1.1rem; position: relative; z-index: 20;">Tap the candles to put them out! 🎂</p>
         </div>
 
         <!-- Interactive Gifts -->
@@ -244,10 +254,8 @@
 
     <script>
         let openedGiftsCount = 0;
-        let audioContext;
-        let analyser;
+        let blownOutCandles = 0;
 
-        // Function to create background sparkles/stars
         function createStars() {
             const starContainer = document.createElement('div');
             starContainer.style.position = 'fixed';
@@ -275,7 +283,7 @@
             playClickSound();
             
             const bgMusic = document.getElementById('bg-music');
-            bgMusic.volume = 0.4;
+            bgMusic.volume = 0.3; 
             bgMusic.play().catch(e => console.log("Auto-play prevented by browser."));
 
             const darkRoom = document.getElementById('dark-room');
@@ -285,11 +293,10 @@
             setTimeout(() => {
                 darkRoom.style.display = 'none';
                 document.getElementById('main-screen').style.display = 'flex';
-                createStars(); // The sparkles are back!
+                createStars(); 
                 shootBigConfetti();
-                createOptimizedRoses();
+                createPartyBalloons(); 
                 
-                // Delay typewriter slightly so she can appreciate the intro
                 setTimeout(startTypewriter, 1500); 
             }, 800);
         }
@@ -325,65 +332,33 @@
             });
         }
 
-        async function enableMicrophone() {
-            const btn = document.getElementById('mic-btn');
-            const instruction = document.getElementById('cake-instruction');
+        // --- NEW BULLETPROOF CANDLE LOGIC ---
+        function blowOutCandle(candleElement) {
+            const flameElement = candleElement.querySelector('.flame');
             
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                btn.style.display = 'none';
-                instruction.innerHTML = "Mic active! 🎤 <br> Give a loud blow into your phone/PC!";
+            // If the flame doesn't exist or is already extinguished, ignore the tap
+            if (!flameElement || flameElement.classList.contains('extinguished')) return;
+
+            // Mark flame as extinguished (instantly applies CSS to hide and stop animation)
+            flameElement.classList.add('extinguished');
+            
+            // Disable clicks on this specific candle so it can never be tapped again
+            candleElement.style.pointerEvents = 'none'; 
+            
+            // Increase score and play pop sound
+            blownOutCandles++;
+            playPopSound();
+
+            // Reveal gifts if all 3 are out
+            if (blownOutCandles === 3) {
+                document.getElementById('cake-instruction').innerText = "Yay! Happy Birthday! 🥳";
+                shootBigConfetti();
                 
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                analyser = audioContext.createAnalyser();
-                const microphone = audioContext.createMediaStreamSource(stream);
-                microphone.connect(analyser);
-                analyser.fftSize = 256;
-                
-                detectBlowing();
-            } catch (err) {
-                instruction.innerHTML = "Mic blocked. That's okay! <br> Just click the flames to blow them out manually. 👆";
-                btn.style.display = 'none';
-                document.querySelectorAll('.flame').forEach(f => {
-                    f.style.cursor = 'pointer';
-                    f.onclick = triggerCandleBlowOut;
-                });
+                setTimeout(() => {
+                    document.getElementById('gifts-container').style.display = 'flex';
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                }, 1000);
             }
-        }
-
-        function detectBlowing() {
-            if (!analyser) return;
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
-            analyser.getByteFrequencyData(dataArray);
-            
-            let sum = 0;
-            for (let i = 0; i < bufferLength; i++) { sum += dataArray[i]; }
-            let averageVolume = sum / bufferLength;
-
-            if (averageVolume > 60) {
-                triggerCandleBlowOut();
-            } else {
-                requestAnimationFrame(detectBlowing);
-            }
-        }
-
-        function triggerCandleBlowOut() {
-            document.querySelectorAll('.flame').forEach(flame => {
-                flame.style.opacity = '0';
-            });
-
-            if (audioContext && audioContext.state !== 'closed') {
-                audioContext.close();
-            }
-
-            document.getElementById('cake-instruction').innerText = "Yay! Happy Birthday! 🥳";
-            shootBigConfetti();
-            
-            setTimeout(() => {
-                document.getElementById('gifts-container').style.display = 'flex';
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            }, 1500);
         }
 
         function openGift(card) {
@@ -414,7 +389,7 @@
             }
         }
 
-        function createOptimizedRoses() {
+        function createPartyBalloons() {
             const container = document.createElement('div');
             container.style.position = 'fixed';
             container.style.top = '0'; container.style.left = '0';
@@ -423,18 +398,21 @@
             container.style.overflow = 'hidden';
             document.body.appendChild(container);
 
+            const emojis =['🎈', '✨', '🎉', '🌟', '🎊'];
+
             for (let i = 0; i < 15; i++) {
-                const rose = document.createElement('div');
-                rose.classList.add('rose-particle');
-                rose.innerHTML = '<img src="rose2.jpg" style="width:30px; height:auto;" onerror="this.outerHTML=\'🌹\'">'; 
-                rose.style.fontSize = '25px';
-                rose.style.left = Math.random() * 100 + 'vw';
+                const item = document.createElement('div');
+                item.classList.add('party-item');
+                
+                item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                item.style.fontSize = (Math.random() * 20 + 20) + 'px'; 
+                item.style.left = Math.random() * 100 + 'vw';
                 
                 const duration = Math.random() * 4 + 5;
                 const delay = Math.random() * 5; 
                 
-                rose.style.animation = `fallInfinite ${duration}s linear ${delay}s infinite`;
-                container.appendChild(rose);
+                item.style.animation = `fallInfinite ${duration}s linear ${delay}s infinite`;
+                container.appendChild(item);
             }
         }
 
