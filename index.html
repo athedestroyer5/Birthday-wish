@@ -153,9 +153,6 @@
         /* Rose Petals */
         .petal { position: fixed; top: -10vh; background: linear-gradient(135deg, var(--cherry-red), #ff4d6d); border-radius: 50% 0 50% 50%; z-index: 1; pointer-events: none; will-change: transform; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
 
-        /* Hidden YouTube Audio Player */
-        #youtube-audio-player { position: fixed; top: -1000px; left: -1000px; opacity: 0; pointer-events: none; }
-
         /* Animations */
         @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8) translateZ(0); } 100% { opacity: 1; transform: scale(1.1) translateZ(0); } }
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
@@ -170,8 +167,10 @@
 </head>
 <body>
 
-    <!-- Hidden YouTube iframe container for background music -->
-    <div id="youtube-audio-player"></div>
+    <!-- Smooth, Aesthetic Acoustic Guitar Music -->
+    <audio id="bg-music" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- Password Gate Screen -->
     <div id="dark-room">
@@ -279,7 +278,6 @@
             const input = document.getElementById('pass-input').value.toLowerCase().replace(/\s+/g, '');
             const errorMsg = document.getElementById('error-msg');
 
-            // Accepts variations like "pani puri", "Panipuri" etc.
             if (input === 'panipuri') {
                 errorMsg.style.display = 'none';
                 turnOnLights(); 
@@ -318,9 +316,9 @@
         function turnOnLights() {
             playClickSound();
             
-            // --- INJECT THE MUSIC: Plays Talwinder's "Pal Pal" securely via YouTube ---
-            const audioContainer = document.getElementById('youtube-audio-player');
-            audioContainer.innerHTML = `<iframe width="10" height="10" src="https://www.youtube.com/embed/8of5w7RgcTc?autoplay=1&loop=1&playlist=8of5w7RgcTc" frameborder="0" allow="autoplay; encrypted-media"></iframe>`;
+            const bgMusic = document.getElementById('bg-music');
+            bgMusic.volume = 0.4; 
+            bgMusic.play().catch(e => console.log("Auto-play prevented by browser."));
 
             const darkRoom = document.getElementById('dark-room');
             darkRoom.style.opacity = '0';
