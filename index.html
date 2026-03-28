@@ -24,7 +24,7 @@
             overflow-x: hidden;
             min-height: 100vh;
             transition: background 1.5s ease-in-out;
-            cursor: crosshair; /* Adds a cute cursor */
+            cursor: crosshair;
         }
 
         body.lights-on {
@@ -42,49 +42,29 @@
             will-change: transform, opacity;
         }
 
-        /* --- NEW: Password Gate Styling --- */
+        /* Password Gate Styling */
         #dark-room {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100vh;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            background: #000;
-            z-index: 1000;
-            transition: opacity 1s ease-out;
-            text-align: center;
-            padding: 20px;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: #000; z-index: 1000; transition: opacity 1s ease-out;
+            text-align: center; padding: 20px;
         }
 
-        #password-gate {
-            animation: fadeIn 1.5s ease-in-out;
-        }
+        #password-gate { animation: fadeIn 1.5s ease-in-out; }
 
         .lock-icon { font-size: 3rem; margin-bottom: 10px; }
         
-        .question-text {
-            font-size: 1.3rem; margin-bottom: 20px; color: #bfa4d8; font-weight: 600;
-        }
+        .question-text { font-size: 1.3rem; margin-bottom: 20px; color: #bfa4d8; font-weight: 600; }
 
         #pass-input {
-            padding: 12px 20px;
-            font-size: 1.2rem;
-            border-radius: 25px;
-            border: 2px solid var(--cherry-red);
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            outline: none;
-            text-align: center;
-            font-family: 'Poppins', sans-serif;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-            width: 80%;
-            max-width: 300px;
+            padding: 12px 20px; font-size: 1.2rem; border-radius: 25px;
+            border: 2px solid var(--cherry-red); background: rgba(255, 255, 255, 0.1);
+            color: white; outline: none; text-align: center;
+            font-family: 'Poppins', sans-serif; margin-bottom: 20px;
+            transition: all 0.3s ease; width: 80%; max-width: 300px;
         }
 
-        #pass-input:focus {
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 15px rgba(210, 4, 45, 0.5);
-        }
+        #pass-input:focus { background: rgba(255, 255, 255, 0.2); box-shadow: 0 0 15px rgba(210, 4, 45, 0.5); }
 
         .switch-btn {
             background: transparent; color: #fff; border: 2px solid #fff;
@@ -99,21 +79,17 @@
             font-weight: bold; font-size: 1.1rem;
         }
 
-        /* --- NEW: Magic Touch Fairy Dust --- */
+        /* Magic Touch Fairy Dust */
         .magic-dust {
-            position: fixed; pointer-events: none;
-            width: 6px; height: 6px; background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #bfa4d8, 0 0 20px var(--cherry-red);
-            z-index: 9999;
-            will-change: transform, opacity;
+            position: fixed; pointer-events: none; width: 6px; height: 6px; background: #fff;
+            border-radius: 50%; box-shadow: 0 0 10px #bfa4d8, 0 0 20px var(--cherry-red);
+            z-index: 9999; will-change: transform, opacity;
             animation: dustFade 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
         /* Main Screen */
         #main-screen {
-            display: none;
-            flex-direction: column; align-items: center;
+            display: none; flex-direction: column; align-items: center;
             padding: 50px 20px; position: relative; z-index: 10;
         }
 
@@ -177,6 +153,9 @@
         /* Rose Petals */
         .petal { position: fixed; top: -10vh; background: linear-gradient(135deg, var(--cherry-red), #ff4d6d); border-radius: 50% 0 50% 50%; z-index: 1; pointer-events: none; will-change: transform; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
 
+        /* Hidden YouTube Audio Player */
+        #youtube-audio-player { position: fixed; top: -1000px; left: -1000px; opacity: 0; pointer-events: none; }
+
         /* Animations */
         @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8) translateZ(0); } 100% { opacity: 1; transform: scale(1.1) translateZ(0); } }
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
@@ -191,12 +170,10 @@
 </head>
 <body>
 
-    <!-- Soft Birthday Lo-fi Music -->
-    <audio id="bg-music" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_226da89f81.mp3" type="audio/mpeg">
-    </audio>
+    <!-- Hidden YouTube iframe container for background music -->
+    <div id="youtube-audio-player"></div>
 
-    <!-- NEW: Password Gate Screen -->
+    <!-- Password Gate Screen -->
     <div id="dark-room">
         <div id="password-gate">
             <div class="lock-icon">🔒</div>
@@ -275,9 +252,9 @@
         let openedGiftsCount = 0;
         let blownOutCandles = 0;
 
-        // --- NEW: Magic Touch Fairy Dust Logic ---
+        // Magic Touch Fairy Dust Logic
         let lastDrawTime = 0;
-        const drawInterval = 25; // Prevents lag by limiting particles
+        const drawInterval = 25; 
 
         function createDust(x, y) {
             const now = Date.now();
@@ -286,12 +263,9 @@
 
             const dust = document.createElement('div');
             dust.className = 'magic-dust';
-            dust.style.left = x + 'px';
-            dust.style.top = y + 'px';
-            
+            dust.style.left = x + 'px'; dust.style.top = y + 'px';
             document.body.appendChild(dust);
 
-            // Remove particle after animation
             setTimeout(() => { dust.remove(); }, 800);
         }
 
@@ -300,25 +274,24 @@
             if(e.touches.length > 0) { createDust(e.touches[0].clientX, e.touches[0].clientY); }
         }, { passive: true });
 
-        // --- NEW: Password Verification Logic ---
+        // Password Verification Logic
         function checkPassword() {
-            // Converts input to lowercase and removes ALL spaces so "pani puri", "Panipuri", etc., all work.
             const input = document.getElementById('pass-input').value.toLowerCase().replace(/\s+/g, '');
             const errorMsg = document.getElementById('error-msg');
 
+            // Accepts variations like "pani puri", "Panipuri" etc.
             if (input === 'panipuri') {
                 errorMsg.style.display = 'none';
                 turnOnLights(); 
             } else {
                 errorMsg.style.display = 'block';
                 errorMsg.style.animation = 'none';
-                void errorMsg.offsetWidth; // Trigger reflow
+                void errorMsg.offsetWidth; 
                 errorMsg.style.animation = 'shake 0.4s ease';
-                playPopSound(); // Play a tiny pop on error
+                playPopSound(); 
             }
         }
 
-        // Allow pressing "Enter" key to submit
         document.getElementById('pass-input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') checkPassword();
         });
@@ -345,9 +318,9 @@
         function turnOnLights() {
             playClickSound();
             
-            const bgMusic = document.getElementById('bg-music');
-            bgMusic.volume = 0.4; 
-            bgMusic.play().catch(e => console.log("Auto-play prevented"));
+            // --- INJECT THE MUSIC: Plays Talwinder's "Pal Pal" securely via YouTube ---
+            const audioContainer = document.getElementById('youtube-audio-player');
+            audioContainer.innerHTML = `<iframe width="10" height="10" src="https://www.youtube.com/embed/8of5w7RgcTc?autoplay=1&loop=1&playlist=8of5w7RgcTc" frameborder="0" allow="autoplay; encrypted-media"></iframe>`;
 
             const darkRoom = document.getElementById('dark-room');
             darkRoom.style.opacity = '0';
@@ -379,13 +352,10 @@
         function typeText(element, speed) {
             return new Promise(resolve => {
                 const text = element.getAttribute('data-text');
-                element.style.display = 'block';
-                element.innerHTML = '';
-                let i = 0;
+                element.style.display = 'block'; element.innerHTML = ''; let i = 0;
                 function type() {
                     if (i < text.length) {
-                        element.innerHTML += text.charAt(i);
-                        i++; setTimeout(type, speed);
+                        element.innerHTML += text.charAt(i); i++; setTimeout(type, speed);
                     } else { resolve(); }
                 }
                 type();
@@ -417,15 +387,11 @@
             const content = card.querySelector('.gift-content');
             
             if (content.style.display !== 'block') {
-                content.style.display = 'block';
-                button.style.display = 'none';
-                
-                playPopSound(); 
-                confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 }, colors:['#D2042D', '#ffffff'] });
+                content.style.display = 'block'; button.style.display = 'none';
+                playPopSound(); confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 }, colors:['#D2042D', '#ffffff'] });
                 
                 if (!card.classList.contains('opened')) {
-                    card.classList.add('opened');
-                    openedGiftsCount++;
+                    card.classList.add('opened'); openedGiftsCount++;
 
                     if (openedGiftsCount === 4) {
                         setTimeout(() => {
@@ -448,13 +414,11 @@
             container.style.overflow = 'hidden'; document.body.appendChild(container);
 
             for (let i = 0; i < 25; i++) {
-                const petal = document.createElement('div');
-                petal.classList.add('petal');
+                const petal = document.createElement('div'); petal.classList.add('petal');
                 const size = Math.random() * 10 + 10; 
                 petal.style.width = size + 'px'; petal.style.height = size + 'px';
                 petal.style.left = Math.random() * 100 + 'vw';
-                const duration = Math.random() * 4 + 6; 
-                const delay = Math.random() * 5; 
+                const duration = Math.random() * 4 + 6; const delay = Math.random() * 5; 
                 petal.style.animation = `fallPetal ${duration}s linear ${delay}s infinite`;
                 container.appendChild(petal);
             }
