@@ -24,6 +24,7 @@
             overflow-x: hidden;
             min-height: 100vh;
             transition: background 1.5s ease-in-out;
+            cursor: crosshair; /* Adds a cute cursor */
         }
 
         body.lights-on {
@@ -36,11 +37,12 @@
             background-color: white;
             border-radius: 50%;
             z-index: 0;
-            animation: twinkle infinite alternate;
+            animation: twinkle infinite alternate ease-in-out;
             pointer-events: none;
+            will-change: transform, opacity;
         }
 
-        /* Dark Room Intro Screen */
+        /* --- NEW: Password Gate Styling --- */
         #dark-room {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100vh;
@@ -49,24 +51,63 @@
             background: #000;
             z-index: 1000;
             transition: opacity 1s ease-out;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #password-gate {
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .lock-icon { font-size: 3rem; margin-bottom: 10px; }
+        
+        .question-text {
+            font-size: 1.3rem; margin-bottom: 20px; color: #bfa4d8; font-weight: 600;
+        }
+
+        #pass-input {
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            border-radius: 25px;
+            border: 2px solid var(--cherry-red);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        #pass-input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(210, 4, 45, 0.5);
         }
 
         .switch-btn {
-            background: transparent;
-            color: #fff;
-            border: 2px solid #fff;
-            padding: 15px 40px;
-            font-size: 1.5rem;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(255,255,255,0.5);
-            transition: all 0.3s ease;
+            background: transparent; color: #fff; border: 2px solid #fff;
+            padding: 12px 35px; font-size: 1.2rem; border-radius: 30px;
+            cursor: pointer; box-shadow: 0 0 15px rgba(255,255,255,0.5);
+            transition: all 0.3s ease; font-family: 'Poppins', sans-serif;
+        }
+        .switch-btn:hover { background: #fff; color: #000; box-shadow: 0 0 30px rgba(255,255,255,0.8); }
+
+        #error-msg {
+            color: var(--cherry-red); margin-top: 15px; display: none; 
+            font-weight: bold; font-size: 1.1rem;
         }
 
-        .switch-btn:hover {
-            background: #fff;
-            color: #000;
-            box-shadow: 0 0 30px rgba(255,255,255,0.8);
+        /* --- NEW: Magic Touch Fairy Dust --- */
+        .magic-dust {
+            position: fixed; pointer-events: none;
+            width: 6px; height: 6px; background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #bfa4d8, 0 0 20px var(--cherry-red);
+            z-index: 9999;
+            will-change: transform, opacity;
+            animation: dustFade 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
         /* Main Screen */
@@ -91,8 +132,7 @@
         .flip-box-front, .flip-box-back {
             position: absolute; width: 100%; height: 100%;
             backface-visibility: hidden; border-radius: 50%;
-            border: 5px solid var(--cherry-red); padding: 8px;
-            background: rgba(255, 255, 255, 0.1);
+            border: 5px solid var(--cherry-red); padding: 8px; background: rgba(255, 255, 255, 0.1);
         }
         .flip-box-front img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
         .flip-box-back {
@@ -104,45 +144,22 @@
         h1 { font-family: 'Dancing Script', cursive; font-size: 4rem; margin-top: 20px; color: var(--cherry-red); text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); text-align: center;}
         .nickname { font-size: 1.5rem; color: #bfa4d8; margin-bottom: 20px; letter-spacing: 2px; }
 
-        /* Typewriter Message Boxes */
         .message-box {
             background: rgba(45, 30, 62, 0.6); backdrop-filter: blur(10px);
             border: 1px solid rgba(210, 4, 45, 0.3); border-radius: 15px;
             padding: 25px; max-width: 600px; text-align: center; margin: 15px 0;
             line-height: 1.6; font-size: 1.1rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            display: none; 
-            min-height: 80px;
+            display: none; min-height: 80px;
         }
 
-        /* CSS Cake & Candles */
-        #cake-section {
-            display: none; margin: 40px 0; text-align: center;
-            animation: fadeIn 2s ease-in;
-        }
-        .cake {
-            width: 150px; height: 70px; background: #ffb6c1; border-radius: 10px 10px 0 0;
-            position: relative; margin: 0 auto 30px auto; box-shadow: inset 0 -10px rgba(0,0,0,0.1);
-            border-bottom: 10px solid #8b4513; 
-        }
+        /* Cake & Candles */
+        #cake-section { display: none; margin: 40px 0; text-align: center; animation: fadeIn 2s ease-in; }
+        .cake { width: 150px; height: 70px; background: #ffb6c1; border-radius: 10px 10px 0 0; position: relative; margin: 0 auto 30px auto; box-shadow: inset 0 -10px rgba(0,0,0,0.1); border-bottom: 10px solid #8b4513; }
         .cake::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 15px; background: #fff; border-radius: 10px 10px 0 0; }
         .candle-container { display: flex; justify-content: space-around; position: absolute; width: 100%; top: -30px; padding: 0 20px;}
-        
-        /* Made entire candle clickable for better mobile tapping */
         .candle { width: 12px; height: 35px; background: repeating-linear-gradient(45deg, white, white 5px, var(--cherry-red) 5px, var(--cherry-red) 10px); position: relative; border-radius: 3px; cursor: pointer; }
-        
-        .flame {
-            width: 14px; height: 20px; background: gold; border-radius: 50% 50% 20% 20%;
-            position: absolute; top: -22px; left: -1px; animation: flicker 0.5s infinite alternate;
-            box-shadow: 0 0 15px gold, 0 0 30px orange; 
-            transition: all 0.3s ease-out;
-        }
-        
-        /* THE FIX: This class forces the animation to stop and instantly hides the flame */
-        .flame.extinguished {
-            animation: none !important;
-            opacity: 0 !important;
-            transform: scale(0) !important;
-        }
+        .flame { width: 14px; height: 20px; background: gold; border-radius: 50% 50% 20% 20%; position: absolute; top: -22px; left: -1px; animation: flicker 0.5s infinite alternate; box-shadow: 0 0 15px gold, 0 0 30px orange; transition: all 0.3s ease-out; will-change: transform; }
+        .flame.extinguished { animation: none !important; opacity: 0 !important; transform: scale(0) !important; }
 
         /* Gifts Section */
         .gifts-section { display: none; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px; animation: dropDown 1s ease;}
@@ -151,41 +168,44 @@
         .gift-icon img { width: 70px; animation: bounce 3s infinite; }
         .gift-content { display: none; margin-top: 15px; font-size: 0.95rem; color: #e0d5eb; }
 
-        .btn {
-            background: var(--cherry-red); color: white; border: none; padding: 10px 20px;
-            font-size: 1.1rem; border-radius: 30px; cursor: pointer; font-weight: 600;
-            box-shadow: 0 5px 15px rgba(210, 4, 45, 0.4); transition: transform 0.3s ease;
-            position: relative; z-index: 20;
-        }
+        .btn { background: var(--cherry-red); color: white; border: none; padding: 10px 20px; font-size: 1.1rem; border-radius: 30px; cursor: pointer; font-weight: 600; box-shadow: 0 5px 15px rgba(210, 4, 45, 0.4); transition: transform 0.3s ease; position: relative; z-index: 20; }
         .btn:hover { transform: scale(1.1); }
 
-        #secret-message {
-            background: linear-gradient(135deg, var(--cherry-red), var(--cherry-dark));
-            border: 2px solid gold; box-shadow: 0 0 40px rgba(255, 215, 0, 0.4); display: none; z-index: 20; position: relative;
-        }
+        #secret-message { background: linear-gradient(135deg, var(--cherry-red), var(--cherry-dark)); border: 2px solid gold; box-shadow: 0 0 40px rgba(255, 215, 0, 0.4); display: none; z-index: 20; position: relative; }
         #secret-message h2 { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: gold; margin-bottom: 10px;}
 
+        /* Rose Petals */
+        .petal { position: fixed; top: -10vh; background: linear-gradient(135deg, var(--cherry-red), #ff4d6d); border-radius: 50% 0 50% 50%; z-index: 1; pointer-events: none; will-change: transform; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
+
         /* Animations */
-        @keyframes twinkle { 0% { opacity: 0.2; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px white; } }
+        @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8) translateZ(0); } 100% { opacity: 1; transform: scale(1.1) translateZ(0); } }
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
         @keyframes dropDown { 0% { transform: translateY(-30px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-15px); } 60% { transform: translateY(-7px); } }
-        @keyframes pulseFrame { 0% { box-shadow: 0 0 20px rgba(210, 4, 45, 0.4); } 100% { box-shadow: 0 0 50px rgba(210, 4, 45, 0.8); } }
+        @keyframes pulseFrame { 0% { box-shadow: 0 0 15px rgba(210, 4, 45, 0.5); } 100% { box-shadow: 0 0 35px rgba(210, 4, 45, 0.9); } }
         @keyframes flicker { 0% { transform: scale(1) rotate(-2deg); opacity: 0.9; } 100% { transform: scale(1.1) rotate(2deg); opacity: 1; } }
-        @keyframes fallInfinite { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0.6; } }
-        .party-item { position: fixed; z-index: 1; pointer-events: none; user-select: none; top: -10vh; }
+        @keyframes fallPetal { 0% { transform: translateY(-10vh) rotate3d(1, 1, 1, 0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate3d(1, 1, 1, 360deg); opacity: 0.4; } }
+        @keyframes dustFade { 0% { transform: scale(1) translateY(0); opacity: 0.8; } 100% { transform: scale(0) translateY(-30px); opacity: 0; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } }
     </style>
 </head>
 <body>
 
-    <!-- Cheerful, Friendly Acoustic Ukulele Track -->
+    <!-- Soft Birthday Lo-fi Music -->
     <audio id="bg-music" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_bb630cc098.mp3" type="audio/mpeg">
+        <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_226da89f81.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Dark Room Switch Screen -->
+    <!-- NEW: Password Gate Screen -->
     <div id="dark-room">
-        <button class="switch-btn" onclick="turnOnLights()">💡 Turn On Lights</button>
+        <div id="password-gate">
+            <div class="lock-icon">🔒</div>
+            <p class="question-text">Name of your favourite food?</p>
+            <input type="text" id="pass-input" placeholder="Type here..." autocomplete="off">
+            <br>
+            <button class="switch-btn" onclick="checkPassword()">Unlock & Enter 🔓</button>
+            <p id="error-msg">Oops! Wrong answer! 🤭 Try again!</p>
+        </div>
     </div>
 
     <!-- Main Experience Screen -->
@@ -211,7 +231,6 @@
         <div id="cake-section">
             <div class="cake">
                 <div class="candle-container">
-                    <!-- onclick moved to the entire candle for a bigger tap target -->
                     <div class="candle" onclick="blowOutCandle(this)"><div class="flame"></div></div>
                     <div class="candle" onclick="blowOutCandle(this)"><div class="flame"></div></div>
                     <div class="candle" onclick="blowOutCandle(this)"><div class="flame"></div></div>
@@ -256,18 +275,62 @@
         let openedGiftsCount = 0;
         let blownOutCandles = 0;
 
+        // --- NEW: Magic Touch Fairy Dust Logic ---
+        let lastDrawTime = 0;
+        const drawInterval = 25; // Prevents lag by limiting particles
+
+        function createDust(x, y) {
+            const now = Date.now();
+            if (now - lastDrawTime < drawInterval) return; 
+            lastDrawTime = now;
+
+            const dust = document.createElement('div');
+            dust.className = 'magic-dust';
+            dust.style.left = x + 'px';
+            dust.style.top = y + 'px';
+            
+            document.body.appendChild(dust);
+
+            // Remove particle after animation
+            setTimeout(() => { dust.remove(); }, 800);
+        }
+
+        window.addEventListener('mousemove', (e) => { createDust(e.clientX, e.clientY); });
+        window.addEventListener('touchmove', (e) => { 
+            if(e.touches.length > 0) { createDust(e.touches[0].clientX, e.touches[0].clientY); }
+        }, { passive: true });
+
+        // --- NEW: Password Verification Logic ---
+        function checkPassword() {
+            // Converts input to lowercase and removes ALL spaces so "pani puri", "Panipuri", etc., all work.
+            const input = document.getElementById('pass-input').value.toLowerCase().replace(/\s+/g, '');
+            const errorMsg = document.getElementById('error-msg');
+
+            if (input === 'panipuri') {
+                errorMsg.style.display = 'none';
+                turnOnLights(); 
+            } else {
+                errorMsg.style.display = 'block';
+                errorMsg.style.animation = 'none';
+                void errorMsg.offsetWidth; // Trigger reflow
+                errorMsg.style.animation = 'shake 0.4s ease';
+                playPopSound(); // Play a tiny pop on error
+            }
+        }
+
+        // Allow pressing "Enter" key to submit
+        document.getElementById('pass-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkPassword();
+        });
+
         function createStars() {
             const starContainer = document.createElement('div');
-            starContainer.style.position = 'fixed';
-            starContainer.style.top = '0';
-            starContainer.style.left = '0';
-            starContainer.style.width = '100vw';
-            starContainer.style.height = '100vh';
-            starContainer.style.zIndex = '0';
-            starContainer.style.pointerEvents = 'none';
+            starContainer.style.position = 'fixed'; starContainer.style.top = '0'; starContainer.style.left = '0';
+            starContainer.style.width = '100vw'; starContainer.style.height = '100vh';
+            starContainer.style.zIndex = '0'; starContainer.style.pointerEvents = 'none';
             document.body.appendChild(starContainer);
 
-            for (let i = 0; i < 80; i++) {
+            for (let i = 0; i < 40; i++) {
                 const star = document.createElement('div');
                 star.classList.add('star');
                 star.style.width = Math.random() * 3 + 'px';
@@ -283,8 +346,8 @@
             playClickSound();
             
             const bgMusic = document.getElementById('bg-music');
-            bgMusic.volume = 0.3; 
-            bgMusic.play().catch(e => console.log("Auto-play prevented by browser."));
+            bgMusic.volume = 0.4; 
+            bgMusic.play().catch(e => console.log("Auto-play prevented"));
 
             const darkRoom = document.getElementById('dark-room');
             darkRoom.style.opacity = '0';
@@ -295,7 +358,7 @@
                 document.getElementById('main-screen').style.display = 'flex';
                 createStars(); 
                 shootBigConfetti();
-                createPartyBalloons(); 
+                createRosePetals(); 
                 
                 setTimeout(startTypewriter, 1500); 
             }, 800);
@@ -322,34 +385,22 @@
                 function type() {
                     if (i < text.length) {
                         element.innerHTML += text.charAt(i);
-                        i++;
-                        setTimeout(type, speed);
-                    } else {
-                        resolve();
-                    }
+                        i++; setTimeout(type, speed);
+                    } else { resolve(); }
                 }
                 type();
             });
         }
 
-        // --- NEW BULLETPROOF CANDLE LOGIC ---
         function blowOutCandle(candleElement) {
             const flameElement = candleElement.querySelector('.flame');
-            
-            // If the flame doesn't exist or is already extinguished, ignore the tap
             if (!flameElement || flameElement.classList.contains('extinguished')) return;
 
-            // Mark flame as extinguished (instantly applies CSS to hide and stop animation)
             flameElement.classList.add('extinguished');
-            
-            // Disable clicks on this specific candle so it can never be tapped again
             candleElement.style.pointerEvents = 'none'; 
             
-            // Increase score and play pop sound
-            blownOutCandles++;
-            playPopSound();
+            blownOutCandles++; playPopSound();
 
-            // Reveal gifts if all 3 are out
             if (blownOutCandles === 3) {
                 document.getElementById('cake-instruction').innerText = "Yay! Happy Birthday! 🥳";
                 shootBigConfetti();
@@ -389,30 +440,23 @@
             }
         }
 
-        function createPartyBalloons() {
+        function createRosePetals() {
             const container = document.createElement('div');
-            container.style.position = 'fixed';
-            container.style.top = '0'; container.style.left = '0';
+            container.style.position = 'fixed'; container.style.top = '0'; container.style.left = '0';
             container.style.width = '100vw'; container.style.height = '100vh';
             container.style.pointerEvents = 'none'; container.style.zIndex = '1';
-            container.style.overflow = 'hidden';
-            document.body.appendChild(container);
+            container.style.overflow = 'hidden'; document.body.appendChild(container);
 
-            const emojis =['🎈', '✨', '🎉', '🌟', '🎊'];
-
-            for (let i = 0; i < 15; i++) {
-                const item = document.createElement('div');
-                item.classList.add('party-item');
-                
-                item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-                item.style.fontSize = (Math.random() * 20 + 20) + 'px'; 
-                item.style.left = Math.random() * 100 + 'vw';
-                
-                const duration = Math.random() * 4 + 5;
+            for (let i = 0; i < 25; i++) {
+                const petal = document.createElement('div');
+                petal.classList.add('petal');
+                const size = Math.random() * 10 + 10; 
+                petal.style.width = size + 'px'; petal.style.height = size + 'px';
+                petal.style.left = Math.random() * 100 + 'vw';
+                const duration = Math.random() * 4 + 6; 
                 const delay = Math.random() * 5; 
-                
-                item.style.animation = `fallInfinite ${duration}s linear ${delay}s infinite`;
-                container.appendChild(item);
+                petal.style.animation = `fallPetal ${duration}s linear ${delay}s infinite`;
+                container.appendChild(petal);
             }
         }
 
@@ -421,8 +465,7 @@
             const osc = audioCtx.createOscillator();
             osc.type = 'square'; osc.frequency.setValueAtTime(400, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
-            osc.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            osc.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1);
         }
 
         function playPopSound() {
