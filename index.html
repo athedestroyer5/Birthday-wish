@@ -184,10 +184,10 @@
 </head>
 <body>
 
-    <!-- RELIABLE AUDIO LINKS -->
-    <!-- MP3 format is supported by ALL browsers. This link is extremely reliable. -->
+    <!-- RELIABLE AUDIO LINKS (Using Archive.org - Never gets blocked) -->
+    <!-- Beautiful, soft "Music Box" version of Happy Birthday -->
     <audio id="bg-music" loop preload="auto">
-        <source src="https://assets.mixkit.co/music/preview/mixkit-happy-birthday-piano-version-548.mp3" type="audio/mpeg">
+        <source src="https://ia801402.us.archive.org/29/items/happy-birthday-music-box/happy-birthday-music-box.mp3" type="audio/mpeg">
     </audio>
     <!-- Cute Error Sound -->
     <audio id="error-sound" preload="auto">
@@ -201,11 +201,11 @@
             
             <p class="question-text">Name of your favourite food?</p>
             
-            <!-- EXPLICIT HINT MENTION -->
             <div class="hint-container">
                 Stuck? Click for a hint! <button class="hint-btn" onclick="toggleHint()" title="Click for a hint">❓</button>
             </div>
             
+            <!-- CHANGED TO "YOU" ALWAYS EAT -->
             <p id="pass-hint">Hint: That spicy street food you always eat... 🌶️</p>
 
             <input type="text" id="pass-input" placeholder="Type here..." autocomplete="off">
@@ -336,10 +336,19 @@
             if (input === 'panipuri') {
                 errorMsg.style.display = 'none';
                 
-                // FORCE THE AUDIO TO START IMMEDIATELY ON CLICK
+                // FORCE AUDIO PLAY ON UNLOCK (Browsers require audio to start right when the user clicks)
                 const bgMusic = document.getElementById('bg-music');
                 bgMusic.volume = 0.5; 
-                bgMusic.play().catch(e => console.log("Auto-play prevented by browser."));
+                let playPromise = bgMusic.play();
+                
+                // Safety net in case the browser STILL tries to block it
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log("Browser blocked autoplay. It will start on the next tap.");
+                        document.body.addEventListener('click', () => { bgMusic.play(); }, { once: true });
+                        document.body.addEventListener('touchstart', () => { bgMusic.play(); }, { once: true });
+                    });
+                }
                 
                 turnOnLights(); 
             } else {
@@ -494,8 +503,6 @@
             }
         }
 
-        // --- BULLETPROOF AUDIO FIXES ---
-
         // Error sound (Works fine)
         function playErrorSound() {
             const audio = document.getElementById('error-sound');
@@ -514,7 +521,6 @@
                 osc.connect(gainNode);
                 gainNode.connect(audioCtx.destination);
                 
-                // Makes it sound like a happy bubble pop
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(800, audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
