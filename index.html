@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Palak</title>
     
-    <!-- Preload heavy assets for faster experience -->
+    <!-- Preload assets for faster experience -->
     <link rel="preload" href="tata.jpg" as="image">
-    <link rel="preload" href="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3" as="audio">
+    <!-- Preload new audio files -->
+    <link rel="preload" href="https://cdn.pixabay.com/download/audio/2022/08/31/audio_14c62e5b8e.mp3" as="audio"> <!-- Soft Piano Birthday -->
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -17,6 +18,7 @@
             --cherry-dark: #99001f;
             --black-lavender-1: #1a1124;
             --black-lavender-2: #2d1e3e;
+            --purple-glow: #4a235a;
             --text-light: #f5f0fa;
         }
 
@@ -29,23 +31,25 @@
             overflow-x: hidden;
             min-height: 100vh;
             transition: background 1.5s ease-in-out;
-            /* Replaced crosshair with a magic wand cursor */
             cursor: url('https://img.icons8.com/fluency/24/magic-wand.png'), auto;
         }
 
+        /* 🌟 NEW: Dynamic Animated Background Gradient */
         body.lights-on {
-            background: linear-gradient(135deg, var(--black-lavender-1), var(--black-lavender-2));
+            background: linear-gradient(135deg, var(--black-lavender-1), var(--black-lavender-2), var(--purple-glow));
+            background-size: 200% 200%;
+            animation: gradientShift 10s ease infinite;
         }
 
-        /* Twinkling Stars */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .star {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            z-index: 0;
-            animation: twinkle infinite alternate ease-in-out;
-            pointer-events: none;
-            will-change: transform, opacity;
+            position: absolute; background-color: white; border-radius: 50%; z-index: 0;
+            animation: twinkle infinite alternate ease-in-out; pointer-events: none; will-change: transform, opacity;
         }
 
         /* Password Gate Styling */
@@ -56,11 +60,22 @@
             text-align: center; padding: 20px;
         }
 
-        #password-gate { animation: fadeIn 1.5s ease-in-out; }
+        #password-gate { animation: fadeIn 1.5s ease-in-out; position: relative; }
 
         .lock-icon { font-size: 3rem; margin-bottom: 10px; }
         
-        .question-text { font-size: 1.3rem; margin-bottom: 20px; color: #bfa4d8; font-weight: 600; }
+        .question-text { font-size: 1.3rem; margin-bottom: 15px; color: #bfa4d8; font-weight: 600; display: inline-block; }
+        
+        /* 🌟 NEW: Password Hint Styling */
+        .hint-btn {
+            background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer;
+            margin-left: 10px; opacity: 0.7; transition: opacity 0.3s;
+        }
+        .hint-btn:hover { opacity: 1; }
+        #pass-hint {
+            display: none; color: #ffb6c1; font-size: 0.9rem; margin-bottom: 15px;
+            font-style: italic; animation: fadeIn 0.5s ease-in;
+        }
 
         #pass-input {
             padding: 12px 20px; font-size: 1.2rem; border-radius: 25px;
@@ -68,14 +83,10 @@
             color: white; outline: none; text-align: center;
             font-family: 'Poppins', sans-serif; margin-bottom: 20px;
             transition: all 0.3s ease; width: 80%; max-width: 300px;
+            display: block; margin: 0 auto 20px auto;
         }
 
         #pass-input:focus { background: rgba(255, 255, 255, 0.2); box-shadow: 0 0 15px rgba(210, 4, 45, 0.5); }
-
-        /* Prevents iOS Safari from auto-zooming on input tap */
-        @media (max-width: 600px) {
-            #pass-input { font-size: 16px; } 
-        }
 
         .switch-btn {
             background: transparent; color: #fff; border: 2px solid #fff;
@@ -85,95 +96,85 @@
         }
         .switch-btn:hover { background: #fff; color: #000; box-shadow: 0 0 30px rgba(255,255,255,0.8); }
 
-        #error-msg {
-            color: var(--cherry-red); margin-top: 15px; display: none; 
-            font-weight: bold; font-size: 1.1rem;
-        }
+        #error-msg { color: var(--cherry-red); margin-top: 15px; display: none; font-weight: bold; font-size: 1.1rem; }
 
-        /* Magic Touch Fairy Dust */
         .magic-dust {
             position: fixed; pointer-events: none; width: 6px; height: 6px; background: #fff;
             border-radius: 50%; box-shadow: 0 0 10px #bfa4d8, 0 0 20px var(--cherry-red);
             z-index: 9999; will-change: transform, opacity; display: none;
         }
 
-        /* Main Screen */
-        #main-screen {
-            display: none; flex-direction: column; align-items: center;
-            padding: 50px 20px; position: relative; z-index: 10;
-        }
+        #main-screen { display: none; flex-direction: column; align-items: center; padding: 50px 20px; position: relative; z-index: 10; }
 
-        /* 3D Photo Container */
-        .photo-container {
-            margin-top: 20px; position: relative; perspective: 1000px;
-            animation: dropDown 1.5s ease-out; z-index: 15; cursor: pointer;
-        }
+        .photo-container { margin-top: 20px; position: relative; perspective: 1000px; animation: dropDown 1.5s ease-out; z-index: 15; cursor: pointer; }
         .flip-box-inner {
-            width: 250px; height: 250px; text-align: center;
-            transition: transform 0.8s; transform-style: preserve-3d;
-            border-radius: 50%; box-shadow: 0 0 30px rgba(210, 4, 45, 0.5);
-            animation: pulseFrame 3s infinite alternate;
+            width: 250px; height: 250px; text-align: center; transition: transform 0.8s; transform-style: preserve-3d;
+            border-radius: 50%; box-shadow: 0 0 30px rgba(210, 4, 45, 0.5); animation: pulseFrame 3s infinite alternate;
         }
         .photo-container:hover .flip-box-inner { transform: rotateY(180deg); }
         .flip-box-front, .flip-box-back {
-            position: absolute; width: 100%; height: 100%;
-            backface-visibility: hidden; border-radius: 50%;
-            border: 5px solid var(--cherry-red); padding: 8px; background: rgba(255, 255, 255, 0.1);
-            overflow: hidden;
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 50%;
+            border: 5px solid var(--cherry-red); padding: 8px; background: rgba(255, 255, 255, 0.1); overflow: hidden;
         }
         .flip-box-front img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        
         .flip-box-back {
-            transform: rotateY(180deg); background: var(--cherry-red); color: white;
-            display: flex; align-items: center; justify-content: center;
+            transform: rotateY(180deg); background: var(--cherry-red); color: white; display: flex; align-items: center; justify-content: center;
             font-family: 'Dancing Script', cursive; font-size: 3rem; position: relative;
         }
-
-        .flip-box-back img {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            border-radius: 50%; object-fit: cover; opacity: 0.3; z-index: 1;
-            transition: opacity 0.5s ease-in-out;
-        }
+        .flip-box-back img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; opacity: 0.3; z-index: 1; transition: opacity 0.5s ease-in-out; }
         .flip-box-back span { z-index: 2; position: relative; text-shadow: 2px 2px 5px rgba(0,0,0,0.8); }
 
         h1 { font-family: 'Dancing Script', cursive; font-size: 4rem; margin-top: 20px; color: var(--cherry-red); text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); text-align: center;}
         .nickname { font-size: 1.5rem; color: #bfa4d8; margin-bottom: 20px; letter-spacing: 2px; }
 
+        /* 🌟 NEW: Glassmorphism Design */
         .message-box {
-            background: rgba(45, 30, 62, 0.6); backdrop-filter: blur(10px);
-            border: 1px solid rgba(210, 4, 45, 0.3); border-radius: 15px;
-            padding: 25px; max-width: 600px; text-align: center; margin: 15px 0;
-            line-height: 1.6; font-size: 1.1rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            display: none; min-height: 80px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px; padding: 25px; max-width: 600px; text-align: center; margin: 15px 0;
+            line-height: 1.6; font-size: 1.1rem; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            display: none; min-height: 80px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
 
-        /* Cake & Candles */
-        #cake-section { display: none; margin: 40px 0; text-align: center; animation: fadeIn 2s ease-in; }
-        .cake { width: 150px; height: 70px; background: #ffb6c1; border-radius: 10px 10px 0 0; position: relative; margin: 0 auto 30px auto; box-shadow: inset 0 -10px rgba(0,0,0,0.1); border-bottom: 10px solid #8b4513; }
-        .cake::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 15px; background: #fff; border-radius: 10px 10px 0 0; }
-        .candle-container { display: flex; justify-content: space-around; position: absolute; width: 100%; top: -30px; padding: 0 20px;}
-        .candle { width: 12px; height: 35px; background: repeating-linear-gradient(45deg, white, white 5px, var(--cherry-red) 5px, var(--cherry-red) 10px); position: relative; border-radius: 3px; cursor: pointer; outline: none; }
-        .candle:focus { box-shadow: 0 0 10px #bfa4d8; } /* Accessibility Focus */
-        .flame { width: 14px; height: 20px; background: gold; border-radius: 50% 50% 20% 20%; position: absolute; top: -22px; left: -1px; animation: flicker 0.5s infinite alternate; box-shadow: 0 0 15px gold, 0 0 30px orange; transition: all 0.3s ease-out; will-change: transform; }
+        /* 🌟 NEW: Better Multi-Tiered CSS Cake */
+        #cake-section { display: none; margin: 60px 0 40px 0; text-align: center; animation: fadeIn 2s ease-in; }
+        
+        .cake-wrapper { position: relative; width: 220px; height: 180px; margin: 0 auto 30px auto; z-index: 10;}
+        .plate { position: absolute; bottom: -10px; left: -15px; width: 250px; height: 40px; background: #e0e0e0; border-radius: 50%; box-shadow: 0 10px 15px rgba(0,0,0,0.6); border-bottom: 5px solid #ccc; z-index: 1; }
+        .tier-1 { position: absolute; bottom: 10px; left: 10px; width: 200px; height: 80px; background: #ffb6c1; border-radius: 10px; box-shadow: inset -15px 0 rgba(0,0,0,0.1); z-index: 2; border-bottom: 6px solid #8b4513; }
+        .tier-2 { position: absolute; bottom: 90px; left: 35px; width: 150px; height: 60px; background: #ff69b4; border-radius: 10px; box-shadow: inset -10px 0 rgba(0,0,0,0.1); z-index: 3; }
+        .frosting-1 { position: absolute; top: 0; left: 0; width: 100%; height: 25px; background: #fff; border-radius: 10px 10px 15px 15px; z-index: 4; }
+        .frosting-1::after { content: ''; position: absolute; top: 20px; left: 10px; width: 20px; height: 25px; background: #fff; border-radius: 50%; box-shadow: 40px 5px 0 -2px #fff, 80px -5px 0 2px #fff, 120px 8px 0 -4px #fff, 160px 0 0 0 #fff; }
+        .frosting-2 { position: absolute; top: 0; left: 0; width: 100%; height: 20px; background: #fff; border-radius: 10px 10px 15px 15px; z-index: 4; }
+        .frosting-2::after { content: ''; position: absolute; top: 15px; left: 15px; width: 15px; height: 20px; background: #fff; border-radius: 50%; box-shadow: 35px 8px 0 -2px #fff, 75px -2px 0 1px #fff, 110px 5px 0 -3px #fff; }
+
+        .candle-container { display: flex; justify-content: space-evenly; position: absolute; width: 100%; top: -35px; left: 0; z-index: 5; padding: 0 20px; }
+        .candle { width: 12px; height: 40px; background: repeating-linear-gradient(45deg, white, white 5px, var(--cherry-red) 5px, var(--cherry-red) 10px); position: relative; border-radius: 3px; cursor: pointer; outline: none; box-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .candle:focus { box-shadow: 0 0 10px #bfa4d8; }
+        .flame { width: 16px; height: 24px; background: gold; border-radius: 50% 50% 20% 20%; position: absolute; top: -24px; left: -2px; animation: flicker 0.5s infinite alternate; box-shadow: 0 0 15px gold, 0 0 30px orange; transition: all 0.3s ease-out; will-change: transform; }
         .flame.extinguished { animation: none !important; opacity: 0 !important; transform: scale(0) !important; }
 
-        /* Gifts Section */
         .gifts-section { display: none; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px; animation: dropDown 1s ease;}
-        .gift-card { background: rgba(255, 255, 255, 0.05); border: 2px solid var(--cherry-red); border-radius: 15px; width: 220px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.4s ease; z-index: 20; position: relative; outline: none; }
-        .gift-card:hover, .gift-card:focus { transform: translateY(-10px); background: rgba(210, 4, 45, 0.1); box-shadow: 0 0 15px rgba(210, 4, 45, 0.4); }
+        
+        /* 🌟 NEW: Glassmorphism for gifts */
+        .gift-card { 
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(210, 4, 45, 0.4); border-radius: 15px; width: 220px; padding: 20px; text-align: center; 
+            cursor: pointer; transition: all 0.4s ease; z-index: 20; position: relative; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .gift-card:hover, .gift-card:focus { transform: translateY(-10px); background: rgba(210, 4, 45, 0.15); box-shadow: 0 10px 25px rgba(210, 4, 45, 0.4); border-color: rgba(255,255,255,0.4); }
         .gift-icon img { width: 70px; animation: bounce 3s infinite; }
-        .gift-content { display: none; margin-top: 15px; font-size: 0.95rem; color: #e0d5eb; }
+        .gift-content { display: none; margin-top: 15px; font-size: 0.95rem; color: #fff; font-weight: bold; text-shadow: 1px 1px 2px black;}
 
         .btn { background: var(--cherry-red); color: white; border: none; padding: 10px 20px; font-size: 1.1rem; border-radius: 30px; cursor: pointer; font-weight: 600; box-shadow: 0 5px 15px rgba(210, 4, 45, 0.4); transition: transform 0.3s ease; position: relative; z-index: 20; }
         .btn:hover { transform: scale(1.1); }
 
-        #secret-message { background: linear-gradient(135deg, var(--cherry-red), var(--cherry-dark)); border: 2px solid gold; box-shadow: 0 0 40px rgba(255, 215, 0, 0.4); display: none; z-index: 20; position: relative; }
+        #secret-message { background: linear-gradient(135deg, rgba(210, 4, 45, 0.8), rgba(153, 0, 31, 0.8)); border: 2px solid gold; box-shadow: 0 0 40px rgba(255, 215, 0, 0.4); display: none; z-index: 20; position: relative; }
         #secret-message h2 { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: gold; margin-bottom: 10px;}
 
-        /* Rose Petals */
         .petal { position: fixed; top: -10vh; background: linear-gradient(135deg, var(--cherry-red), #ff4d6d); border-radius: 50% 0 50% 50%; z-index: 1; pointer-events: none; will-change: transform; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
 
-        /* Animations */
         @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8) translateZ(0); } 100% { opacity: 1; transform: scale(1.1) translateZ(0); } }
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
         @keyframes dropDown { 0% { transform: translateY(-30px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
@@ -187,18 +188,33 @@
 </head>
 <body>
 
-    <!-- Smooth, Aesthetic Acoustic Guitar Music -->
-    <audio id="bg-music" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3" type="audio/mpeg">
+    <!-- 🌟 NEW: Preloaded Proper Audio Tags -->
+    <!-- Soft Peaceful Piano Birthday Music -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2022/08/31/audio_14c62e5b8e.mp3" type="audio/mpeg">
+    </audio>
+    <!-- Cute Error Sound -->
+    <audio id="error-sound" preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_c6ccf3232f.mp3" type="audio/mpeg">
+    </audio>
+    <!-- Satisfying Pop/Click Sound -->
+    <audio id="pop-sound" preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7314781eb8.mp3" type="audio/mpeg">
     </audio>
 
     <!-- Password Gate Screen -->
     <div id="dark-room">
         <div id="password-gate">
             <div class="lock-icon">🔒</div>
-            <p class="question-text">Name of your favourite food?</p>
+            
+            <div>
+                <p class="question-text">Name of your favourite food?</p>
+                <button class="hint-btn" onclick="toggleHint()" title="Click for a hint">❓</button>
+            </div>
+            <!-- 🌟 NEW: Password Hint -->
+            <p id="pass-hint">Hint: That spicy street food we always eat... 🌶️</p>
+
             <input type="text" id="pass-input" placeholder="Type here..." autocomplete="off">
-            <br>
             <button class="switch-btn" onclick="checkPassword()">Unlock & Enter 🔓</button>
             <p id="error-msg">Oops! Wrong answer! 🤭 Try again!</p>
         </div>
@@ -226,37 +242,43 @@
 
         <div class="message-box" id="msg2" data-text="I have kept some special virtual gifts for you below. But first... make a wish and tap the candles to blow them out!"></div>
 
-        <!-- Interactive Birthday Cake -->
+        <!-- 🌟 NEW: Redesigned Multi-tier Birthday Cake -->
         <div id="cake-section">
-            <div class="cake">
-                <div class="candle-container">
-                    <!-- Added tabindex and onkeydown for Accessibility -->
-                    <div class="candle" tabindex="0" onclick="blowOutCandle(this)" onkeydown="if(event.key === 'Enter') blowOutCandle(this)"><div class="flame"></div></div>
-                    <div class="candle" tabindex="0" onclick="blowOutCandle(this)" onkeydown="if(event.key === 'Enter') blowOutCandle(this)"><div class="flame"></div></div>
-                    <div class="candle" tabindex="0" onclick="blowOutCandle(this)" onkeydown="if(event.key === 'Enter') blowOutCandle(this)"><div class="flame"></div></div>
+            <div class="cake-wrapper">
+                <div class="plate"></div>
+                <div class="tier-1">
+                    <div class="frosting-1"></div>
+                </div>
+                <div class="tier-2">
+                    <div class="frosting-2"></div>
+                    <div class="candle-container">
+                        <div class="candle" aria-label="Blow out candle" tabindex="0" onclick="blowOutCandle(this)" onkeydown="if(event.key === 'Enter') blowOutCandle(this)"><div class="flame"></div></div>
+                        <div class="candle" aria-label="Blow out candle" tabindex="0" onclick="blowOutCandle(this)" onkeydown="if(event.key === 'Enter') blowOutCandle(this)"><div class="flame"></div></div>
+                        <div class="candle" aria-label="Blow out candle" tabindex="0" onclick="blowOutCandle(this)" onkeydown="if(event.key === 'Enter') blowOutCandle(this)"><div class="flame"></div></div>
+                    </div>
                 </div>
             </div>
-            <p id="cake-instruction" style="margin-bottom: 15px; font-size: 1.1rem; position: relative; z-index: 20;">Tap the candles to put them out! 🎂</p>
+            <p id="cake-instruction" style="margin-bottom: 15px; font-size: 1.1rem; position: relative; z-index: 20; text-shadow: 1px 1px 3px black;">Tap the candles to put them out! 🎂</p>
         </div>
 
         <!-- Interactive Gifts -->
         <div class="gifts-section" id="gifts-container">
-            <div class="gift-card" tabindex="0" onclick="openGift(this)" onkeydown="if(event.key === 'Enter') openGift(this)">
+            <div class="gift-card" aria-label="Open gift 1" tabindex="0" onclick="openGift(this)" onkeydown="if(event.key === 'Enter') openGift(this)">
                 <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
                 <button class="btn" tabindex="-1">Open Gift 1</button>
                 <div class="gift-content">A box full of virtual chocolates and lots of respect for how awesome you are!</div>
             </div>
-            <div class="gift-card" tabindex="0" onclick="openGift(this)" onkeydown="if(event.key === 'Enter') openGift(this)">
+            <div class="gift-card" aria-label="Open gift 2" tabindex="0" onclick="openGift(this)" onkeydown="if(event.key === 'Enter') openGift(this)">
                 <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
                 <button class="btn" tabindex="-1">Open Gift 2</button>
                 <div class="gift-content">Endless blessings for your bright future and career. May you achieve all your goals this year!</div>
             </div>
-            <div class="gift-card" tabindex="0" onclick="openGift(this)" onkeydown="if(event.key === 'Enter') openGift(this)">
+            <div class="gift-card" aria-label="Open gift 3" tabindex="0" onclick="openGift(this)" onkeydown="if(event.key === 'Enter') openGift(this)">
                 <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
                 <button class="btn" tabindex="-1">Open Gift 3</button>
                 <div class="gift-content">A promise to always support you as a good friend whenever you need it.</div>
             </div>
-            <div class="gift-card" tabindex="0" onclick="openGift(this)" onkeydown="if(event.key === 'Enter') openGift(this)">
+            <div class="gift-card" aria-label="Open gift 4" tabindex="0" onclick="openGift(this)" onkeydown="if(event.key === 'Enter') openGift(this)">
                 <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
                 <button class="btn" tabindex="-1">Open Gift 4</button>
                 <div class="gift-content">You're one of the best online friends I've met!</div>
@@ -275,63 +297,44 @@
         let openedGiftsCount = 0;
         let blownOutCandles = 0;
 
-        // Memories Carousel Logic
         const memories =[
             "https://via.placeholder.com/250/99001f/FFFFFF?text=Memory+1",
             "https://via.placeholder.com/250/2d1e3e/FFFFFF?text=Memory+2",
             "https://via.placeholder.com/250/D2042D/FFFFFF?text=Memory+3"
-        ]; // Replace these URLs with real image links!
+        ]; 
         let currentMemory = 0;
 
-        // Mobile Tap to Flip Logic
         document.querySelector('.photo-container').addEventListener('click', function() {
             const inner = this.querySelector('.flip-box-inner');
             inner.style.transform = inner.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
         });
 
-        // Magic Dust Object Pool (High Performance Fix)
-        const dustPoolSize = 30;
-        const dustPool =[];
-        let dustIndex = 0;
+        const dustPoolSize = 30; const dustPool =[]; let dustIndex = 0; let lastDrawTime = 0; const drawInterval = 25; 
 
-        // Create the pool of dust particles on load
         for(let i = 0; i < dustPoolSize; i++) {
             const dust = document.createElement('div');
-            dust.className = 'magic-dust';
-            document.body.appendChild(dust);
-            dustPool.push(dust);
+            dust.className = 'magic-dust'; document.body.appendChild(dust); dustPool.push(dust);
         }
 
-        let lastDrawTime = 0;
-        const drawInterval = 25; 
-
         function createDust(x, y) {
-            const now = Date.now();
-            if (now - lastDrawTime < drawInterval) return; 
-            lastDrawTime = now;
-
+            const now = Date.now(); if (now - lastDrawTime < drawInterval) return; lastDrawTime = now;
             const dust = dustPool[dustIndex];
-            
-            // Reset and reposition the dust particle
-            dust.style.display = 'none';
-            void dust.offsetWidth; // trigger browser reflow
-            dust.style.left = x + 'px'; 
-            dust.style.top = y + 'px';
-            dust.style.display = 'block';
-            dust.style.animation = 'none';
-            void dust.offsetWidth; 
+            dust.style.display = 'none'; void dust.offsetWidth; 
+            dust.style.left = x + 'px'; dust.style.top = y + 'px';
+            dust.style.display = 'block'; dust.style.animation = 'none'; void dust.offsetWidth; 
             dust.style.animation = 'dustFade 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards';
-
-            // Cycle through the pool
             dustIndex = (dustIndex + 1) % dustPoolSize;
         }
 
         window.addEventListener('mousemove', (e) => { createDust(e.clientX, e.clientY); });
-        window.addEventListener('touchmove', (e) => { 
-            if(e.touches.length > 0) { createDust(e.touches[0].clientX, e.touches[0].clientY); }
-        }, { passive: true });
+        window.addEventListener('touchmove', (e) => { if(e.touches.length > 0) { createDust(e.touches[0].clientX, e.touches[0].clientY); } }, { passive: true });
 
-        // Password Verification Logic
+        // 🌟 NEW: Toggle Password Hint
+        function toggleHint() {
+            const hint = document.getElementById('pass-hint');
+            hint.style.display = hint.style.display === 'block' ? 'none' : 'block';
+        }
+
         function checkPassword() {
             const input = document.getElementById('pass-input').value.toLowerCase().replace(/\s+/g, '');
             const errorMsg = document.getElementById('error-msg');
@@ -341,10 +344,9 @@
                 turnOnLights(); 
             } else {
                 errorMsg.style.display = 'block';
-                errorMsg.style.animation = 'none';
-                void errorMsg.offsetWidth; 
+                errorMsg.style.animation = 'none'; void errorMsg.offsetWidth; 
                 errorMsg.style.animation = 'shake 0.4s ease';
-                playPopSound(); 
+                playErrorSound(); // 🌟 NEW: Call new error sound
             }
         }
 
@@ -360,22 +362,19 @@
             document.body.appendChild(starContainer);
 
             for (let i = 0; i < 40; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                star.style.width = Math.random() * 3 + 'px';
-                star.style.height = star.style.width;
-                star.style.top = Math.random() * 100 + 'vh';
-                star.style.left = Math.random() * 100 + 'vw';
+                const star = document.createElement('div'); star.classList.add('star');
+                star.style.width = Math.random() * 3 + 'px'; star.style.height = star.style.width;
+                star.style.top = Math.random() * 100 + 'vh'; star.style.left = Math.random() * 100 + 'vw';
                 star.style.animationDuration = (Math.random() * 2 + 1) + 's';
                 starContainer.appendChild(star);
             }
         }
 
         function turnOnLights() {
-            playClickSound();
+            playPopSound();
             
             const bgMusic = document.getElementById('bg-music');
-            bgMusic.volume = 0.4; 
+            bgMusic.volume = 0.5; 
             bgMusic.play().catch(e => console.log("Auto-play prevented by browser."));
 
             const darkRoom = document.getElementById('dark-room');
@@ -385,11 +384,8 @@
             setTimeout(() => {
                 darkRoom.style.display = 'none';
                 document.getElementById('main-screen').style.display = 'flex';
-                createStars(); 
-                shootBigConfetti();
-                createRosePetals(); 
+                createStars(); shootBigConfetti(); createRosePetals(); 
                 
-                // Start the memory carousel
                 setInterval(() => {
                     currentMemory = (currentMemory + 1) % memories.length;
                     document.getElementById('carousel-img').src = memories[currentMemory];
@@ -408,7 +404,9 @@
             await typeText(msg2, 35);
             
             document.getElementById('cake-section').style.display = 'block';
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            setTimeout(() => {
+                document.getElementById('cake-section').scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 500);
         }
 
         function typeText(element, speed) {
@@ -439,25 +437,23 @@
                 
                 setTimeout(() => {
                     document.getElementById('gifts-container').style.display = 'flex';
-                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                    setTimeout(() => {
+                        document.getElementById('gifts-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 500);
                 }, 1000);
             }
         }
 
-        // DOUBLE-CLICK PREVENTION ADDED HERE
         function openGift(card) {
-            // 1. Immediately exit the function if the card is already opened
             if (card.classList.contains('opened')) return; 
 
-            // 2. Mark as opened and disable further clicks entirely
             card.classList.add('opened'); 
             card.style.pointerEvents = 'none'; 
             
             const button = card.querySelector('.btn');
             const content = card.querySelector('.gift-content');
             
-            content.style.display = 'block'; 
-            button.style.display = 'none';
+            content.style.display = 'block'; button.style.display = 'none';
 
             playPopSound(); 
             confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 }, colors:['#D2042D', '#ffffff'] });
@@ -467,25 +463,33 @@
             if (openedGiftsCount === 4) {
                 setTimeout(() => {
                     const secretMsg = document.getElementById('secret-message');
-                    secretMsg.style.display = 'block';
-                    secretMsg.style.animation = 'fadeIn 2s ease-in-out';
+                    secretMsg.style.display = 'block'; secretMsg.style.animation = 'fadeIn 2s ease-in-out';
                     shootBigConfetti();
-                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                    setTimeout(() => {
+                        secretMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 500);
                 }, 1000);
             }
         }
 
-        function createRosePetals() {
-            const container = document.createElement('div');
-            container.style.position = 'fixed'; container.style.top = '0'; container.style.left = '0';
-            container.style.width = '100vw'; container.style.height = '100vh';
-            container.style.pointerEvents = 'none'; container.style.zIndex = '1';
-            container.style.overflow = 'hidden'; document.body.appendChild(container);
+        // 🌟 NEW: Confetti on hover for gift cards
+        document.querySelectorAll('.gift-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                if(!this.classList.contains('opened')) {
+                    const rect = this.getBoundingClientRect();
+                    const x = (rect.left + rect.width / 2) / window.innerWidth;
+                    const y = rect.top / window.innerHeight;
+                    confetti({ particleCount: 15, spread: 40, origin: { x: x, y: y }, colors: ['#D2042D', '#ffffff', '#ffd700'], disableForReducedMotion: true, ticks: 100 });
+                }
+            });
+        });
 
+        function createRosePetals() {
+            const container = document.createElement('div'); container.style.position = 'fixed'; container.style.top = '0'; container.style.left = '0';
+            container.style.width = '100vw'; container.style.height = '100vh'; container.style.pointerEvents = 'none'; container.style.zIndex = '1'; container.style.overflow = 'hidden'; document.body.appendChild(container);
             for (let i = 0; i < 25; i++) {
                 const petal = document.createElement('div'); petal.classList.add('petal');
-                const size = Math.random() * 10 + 10; 
-                petal.style.width = size + 'px'; petal.style.height = size + 'px';
+                const size = Math.random() * 10 + 10; petal.style.width = size + 'px'; petal.style.height = size + 'px';
                 petal.style.left = Math.random() * 100 + 'vw';
                 const duration = Math.random() * 4 + 6; const delay = Math.random() * 5; 
                 petal.style.animation = `fallPetal ${duration}s linear ${delay}s infinite`;
@@ -493,24 +497,19 @@
             }
         }
 
-        function playClickSound() {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = audioCtx.createOscillator();
-            osc.type = 'square'; osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
-            osc.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        // 🌟 NEW: Proper Audio playing functions using HTML5 Audio tags
+        function playErrorSound() {
+            const audio = document.getElementById('error-sound');
+            audio.currentTime = 0; // reset to start
+            audio.volume = 0.6;
+            audio.play().catch(e => console.log("Audio play blocked."));
         }
 
         function playPopSound() {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
-            gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            const audio = document.getElementById('pop-sound');
+            audio.currentTime = 0; // reset to start
+            audio.volume = 0.5;
+            audio.play().catch(e => console.log("Audio play blocked."));
         }
 
         function shootBigConfetti() {
