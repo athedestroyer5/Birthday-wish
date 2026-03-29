@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Palak</title>
+    
+    <!-- Preload heavy assets for faster experience -->
+    <link rel="preload" href="tata.jpg" as="image">
+    <link rel="preload" href="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3" as="audio">
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -24,7 +29,8 @@
             overflow-x: hidden;
             min-height: 100vh;
             transition: background 1.5s ease-in-out;
-            cursor: crosshair;
+            /* Replaced crosshair with a magic wand cursor */
+            cursor: url('https://img.icons8.com/fluency/24/magic-wand.png'), auto;
         }
 
         body.lights-on {
@@ -66,6 +72,11 @@
 
         #pass-input:focus { background: rgba(255, 255, 255, 0.2); box-shadow: 0 0 15px rgba(210, 4, 45, 0.5); }
 
+        /* Prevents iOS Safari from auto-zooming on input tap */
+        @media (max-width: 600px) {
+            #pass-input { font-size: 16px; } 
+        }
+
         .switch-btn {
             background: transparent; color: #fff; border: 2px solid #fff;
             padding: 12px 35px; font-size: 1.2rem; border-radius: 30px;
@@ -83,8 +94,7 @@
         .magic-dust {
             position: fixed; pointer-events: none; width: 6px; height: 6px; background: #fff;
             border-radius: 50%; box-shadow: 0 0 10px #bfa4d8, 0 0 20px var(--cherry-red);
-            z-index: 9999; will-change: transform, opacity;
-            animation: dustFade 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            z-index: 9999; will-change: transform, opacity; display: none;
         }
 
         /* Main Screen */
@@ -96,7 +106,7 @@
         /* 3D Photo Container */
         .photo-container {
             margin-top: 20px; position: relative; perspective: 1000px;
-            animation: dropDown 1.5s ease-out; z-index: 15;
+            animation: dropDown 1.5s ease-out; z-index: 15; cursor: pointer;
         }
         .flip-box-inner {
             width: 250px; height: 250px; text-align: center;
@@ -109,13 +119,22 @@
             position: absolute; width: 100%; height: 100%;
             backface-visibility: hidden; border-radius: 50%;
             border: 5px solid var(--cherry-red); padding: 8px; background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
         }
         .flip-box-front img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        
         .flip-box-back {
             transform: rotateY(180deg); background: var(--cherry-red); color: white;
             display: flex; align-items: center; justify-content: center;
-            font-family: 'Dancing Script', cursive; font-size: 3rem;
+            font-family: 'Dancing Script', cursive; font-size: 3rem; position: relative;
         }
+
+        .flip-box-back img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            border-radius: 50%; object-fit: cover; opacity: 0.3; z-index: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .flip-box-back span { z-index: 2; position: relative; text-shadow: 2px 2px 5px rgba(0,0,0,0.8); }
 
         h1 { font-family: 'Dancing Script', cursive; font-size: 4rem; margin-top: 20px; color: var(--cherry-red); text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); text-align: center;}
         .nickname { font-size: 1.5rem; color: #bfa4d8; margin-bottom: 20px; letter-spacing: 2px; }
@@ -133,14 +152,15 @@
         .cake { width: 150px; height: 70px; background: #ffb6c1; border-radius: 10px 10px 0 0; position: relative; margin: 0 auto 30px auto; box-shadow: inset 0 -10px rgba(0,0,0,0.1); border-bottom: 10px solid #8b4513; }
         .cake::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 15px; background: #fff; border-radius: 10px 10px 0 0; }
         .candle-container { display: flex; justify-content: space-around; position: absolute; width: 100%; top: -30px; padding: 0 20px;}
-        .candle { width: 12px; height: 35px; background: repeating-linear-gradient(45deg, white, white 5px, var(--cherry-red) 5px, var(--cherry-red) 10px); position: relative; border-radius: 3px; cursor: pointer; }
+        .candle { width: 12px; height: 35px; background: repeating-linear-gradient(45deg, white, white 5px, var(--cherry-red) 5px, var(--cherry-red) 10px); position: relative; border-radius: 3px; cursor: pointer; outline: none; }
+        .candle:focus { box-shadow: 0 0 10px #bfa4d8; } /* Accessibility Focus */
         .flame { width: 14px; height: 20px; background: gold; border-radius: 50% 50% 20% 20%; position: absolute; top: -22px; left: -1px; animation: flicker 0.5s infinite alternate; box-shadow: 0 0 15px gold, 0 0 30px orange; transition: all 0.3s ease-out; will-change: transform; }
         .flame.extinguished { animation: none !important; opacity: 0 !important; transform: scale(0) !important; }
 
         /* Gifts Section */
         .gifts-section { display: none; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px; animation: dropDown 1s ease;}
-        .gift-card { background: rgba(255, 255, 255, 0.05); border: 2px solid var(--cherry-red); border-radius: 15px; width: 220px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.4s ease; z-index: 20; position: relative;}
-        .gift-card:hover { transform: translateY(-10px); background: rgba(210, 4, 45, 0.1); }
+        .gift-card { background: rgba(255, 255, 255, 0.05); border: 2px solid var(--cherry-red); border-radius: 15px; width: 220px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.4s ease; z-index: 20; position: relative; outline: none; }
+        .gift-card:hover, .gift-card:focus { transform: translateY(-10px); background: rgba(210, 4, 45, 0.1); box-shadow: 0 0 15px rgba(210, 4, 45, 0.4); }
         .gift-icon img { width: 70px; animation: bounce 3s infinite; }
         .gift-content { display: none; margin-top: 15px; font-size: 0.95rem; color: #e0d5eb; }
 
@@ -187,12 +207,15 @@
     <!-- Main Experience Screen -->
     <div id="main-screen">
         
-        <div class="photo-container">
+        <div class="photo-container" tabindex="0">
             <div class="flip-box-inner">
                 <div class="flip-box-front">
                     <img src="tata.jpg" alt="Palak" onerror="this.src='https://via.placeholder.com/250/D2042D/FFFFFF?text=Palak'">
                 </div>
-                <div class="flip-box-back"> A star ⭐ </div>
+                <div class="flip-box-back"> 
+                    <img id="carousel-img" src="https://via.placeholder.com/250/99001f/FFFFFF?text=Memory+1" alt="Memories">
+                    <span>A star ⭐</span> 
+                </div>
             </div>
         </div>
 
@@ -207,9 +230,10 @@
         <div id="cake-section">
             <div class="cake">
                 <div class="candle-container">
-                    <div class="candle" onclick="blowOutCandle(this)"><div class="flame"></div></div>
-                    <div class="candle" onclick="blowOutCandle(this)"><div class="flame"></div></div>
-                    <div class="candle" onclick="blowOutCandle(this)"><div class="flame"></div></div>
+                    <!-- Added tabindex and onkeydown for Accessibility -->
+                    <div class="candle" tabindex="0" onclick="blowOutCandle(this)" onkeydown="if(event.key === 'Enter') blowOutCandle(this)"><div class="flame"></div></div>
+                    <div class="candle" tabindex="0" onclick="blowOutCandle(this)" onkeydown="if(event.key === 'Enter') blowOutCandle(this)"><div class="flame"></div></div>
+                    <div class="candle" tabindex="0" onclick="blowOutCandle(this)" onkeydown="if(event.key === 'Enter') blowOutCandle(this)"><div class="flame"></div></div>
                 </div>
             </div>
             <p id="cake-instruction" style="margin-bottom: 15px; font-size: 1.1rem; position: relative; z-index: 20;">Tap the candles to put them out! 🎂</p>
@@ -217,24 +241,24 @@
 
         <!-- Interactive Gifts -->
         <div class="gifts-section" id="gifts-container">
-            <div class="gift-card" onclick="openGift(this)">
+            <div class="gift-card" tabindex="0" onclick="openGift(this)" onkeydown="if(event.key === 'Enter') openGift(this)">
                 <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
-                <button class="btn">Open Gift 1</button>
+                <button class="btn" tabindex="-1">Open Gift 1</button>
                 <div class="gift-content">A box full of virtual chocolates and lots of respect for how awesome you are!</div>
             </div>
-            <div class="gift-card" onclick="openGift(this)">
+            <div class="gift-card" tabindex="0" onclick="openGift(this)" onkeydown="if(event.key === 'Enter') openGift(this)">
                 <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
-                <button class="btn">Open Gift 2</button>
+                <button class="btn" tabindex="-1">Open Gift 2</button>
                 <div class="gift-content">Endless blessings for your bright future and career. May you achieve all your goals this year!</div>
             </div>
-            <div class="gift-card" onclick="openGift(this)">
+            <div class="gift-card" tabindex="0" onclick="openGift(this)" onkeydown="if(event.key === 'Enter') openGift(this)">
                 <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
-                <button class="btn">Open Gift 3</button>
+                <button class="btn" tabindex="-1">Open Gift 3</button>
                 <div class="gift-content">A promise to always support you as a good friend whenever you need it.</div>
             </div>
-            <div class="gift-card" onclick="openGift(this)">
+            <div class="gift-card" tabindex="0" onclick="openGift(this)" onkeydown="if(event.key === 'Enter') openGift(this)">
                 <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
-                <button class="btn">Open Gift 4</button>
+                <button class="btn" tabindex="-1">Open Gift 4</button>
                 <div class="gift-content">You're one of the best online friends I've met!</div>
             </div>
         </div>
@@ -251,7 +275,33 @@
         let openedGiftsCount = 0;
         let blownOutCandles = 0;
 
-        // Magic Touch Fairy Dust Logic
+        // Memories Carousel Logic
+        const memories =[
+            "https://via.placeholder.com/250/99001f/FFFFFF?text=Memory+1",
+            "https://via.placeholder.com/250/2d1e3e/FFFFFF?text=Memory+2",
+            "https://via.placeholder.com/250/D2042D/FFFFFF?text=Memory+3"
+        ]; // Replace these URLs with real image links!
+        let currentMemory = 0;
+
+        // Mobile Tap to Flip Logic
+        document.querySelector('.photo-container').addEventListener('click', function() {
+            const inner = this.querySelector('.flip-box-inner');
+            inner.style.transform = inner.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
+        });
+
+        // Magic Dust Object Pool (High Performance Fix)
+        const dustPoolSize = 30;
+        const dustPool =[];
+        let dustIndex = 0;
+
+        // Create the pool of dust particles on load
+        for(let i = 0; i < dustPoolSize; i++) {
+            const dust = document.createElement('div');
+            dust.className = 'magic-dust';
+            document.body.appendChild(dust);
+            dustPool.push(dust);
+        }
+
         let lastDrawTime = 0;
         const drawInterval = 25; 
 
@@ -260,12 +310,20 @@
             if (now - lastDrawTime < drawInterval) return; 
             lastDrawTime = now;
 
-            const dust = document.createElement('div');
-            dust.className = 'magic-dust';
-            dust.style.left = x + 'px'; dust.style.top = y + 'px';
-            document.body.appendChild(dust);
+            const dust = dustPool[dustIndex];
+            
+            // Reset and reposition the dust particle
+            dust.style.display = 'none';
+            void dust.offsetWidth; // trigger browser reflow
+            dust.style.left = x + 'px'; 
+            dust.style.top = y + 'px';
+            dust.style.display = 'block';
+            dust.style.animation = 'none';
+            void dust.offsetWidth; 
+            dust.style.animation = 'dustFade 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards';
 
-            setTimeout(() => { dust.remove(); }, 800);
+            // Cycle through the pool
+            dustIndex = (dustIndex + 1) % dustPoolSize;
         }
 
         window.addEventListener('mousemove', (e) => { createDust(e.clientX, e.clientY); });
@@ -331,6 +389,12 @@
                 shootBigConfetti();
                 createRosePetals(); 
                 
+                // Start the memory carousel
+                setInterval(() => {
+                    currentMemory = (currentMemory + 1) % memories.length;
+                    document.getElementById('carousel-img').src = memories[currentMemory];
+                }, 3000);
+
                 setTimeout(startTypewriter, 1500); 
             }, 800);
         }
@@ -380,27 +444,34 @@
             }
         }
 
+        // DOUBLE-CLICK PREVENTION ADDED HERE
         function openGift(card) {
+            // 1. Immediately exit the function if the card is already opened
+            if (card.classList.contains('opened')) return; 
+
+            // 2. Mark as opened and disable further clicks entirely
+            card.classList.add('opened'); 
+            card.style.pointerEvents = 'none'; 
+            
             const button = card.querySelector('.btn');
             const content = card.querySelector('.gift-content');
             
-            if (content.style.display !== 'block') {
-                content.style.display = 'block'; button.style.display = 'none';
-                playPopSound(); confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 }, colors:['#D2042D', '#ffffff'] });
-                
-                if (!card.classList.contains('opened')) {
-                    card.classList.add('opened'); openedGiftsCount++;
+            content.style.display = 'block'; 
+            button.style.display = 'none';
 
-                    if (openedGiftsCount === 4) {
-                        setTimeout(() => {
-                            const secretMsg = document.getElementById('secret-message');
-                            secretMsg.style.display = 'block';
-                            secretMsg.style.animation = 'fadeIn 2s ease-in-out';
-                            shootBigConfetti();
-                            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                        }, 1000);
-                    }
-                }
+            playPopSound(); 
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 }, colors:['#D2042D', '#ffffff'] });
+            
+            openedGiftsCount++;
+
+            if (openedGiftsCount === 4) {
+                setTimeout(() => {
+                    const secretMsg = document.getElementById('secret-message');
+                    secretMsg.style.display = 'block';
+                    secretMsg.style.animation = 'fadeIn 2s ease-in-out';
+                    shootBigConfetti();
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                }, 1000);
             }
         }
 
