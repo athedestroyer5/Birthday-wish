@@ -35,78 +35,32 @@
             animation: gradientShift 10s ease infinite;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        .star {
-            position: absolute; background-color: white; border-radius: 50%; z-index: 0;
-            animation: twinkle infinite alternate ease-in-out; pointer-events: none; will-change: transform, opacity;
-        }
+        .star { position: absolute; background-color: white; border-radius: 50%; z-index: 0; animation: twinkle infinite alternate ease-in-out; pointer-events: none; }
 
-        /* Password Gate Styling */
-        #dark-room {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: #000; z-index: 1000; transition: opacity 1s ease-out;
-            text-align: center; padding: 20px;
-        }
-
+        #dark-room { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #000; z-index: 1000; transition: opacity 1s ease-out; text-align: center; padding: 20px; }
         #password-gate { animation: fadeIn 1.5s ease-in-out; position: relative; }
 
         .lock-icon { font-size: 3rem; margin-bottom: 10px; }
-        
         .question-text { font-size: 1.3rem; margin-bottom: 5px; color: #bfa4d8; font-weight: 600; }
         
         .hint-container { margin-bottom: 15px; font-size: 0.95rem; color: #ccc; }
-        .hint-btn {
-            background: rgba(255,255,255,0.1); border: 1px solid white; color: #fff; font-size: 1rem; 
-            cursor: pointer; padding: 2px 8px; border-radius: 50%; margin-left: 5px; transition: all 0.3s;
-        }
+        .hint-btn { background: rgba(255,255,255,0.1); border: 1px solid white; color: #fff; font-size: 1rem; cursor: pointer; padding: 2px 8px; border-radius: 50%; margin-left: 5px; transition: all 0.3s; }
         .hint-btn:hover { background: white; color: black; box-shadow: 0 0 10px white; }
-        #pass-hint {
-            display: none; color: #ffb6c1; font-size: 1rem; margin-top: 10px;
-            font-style: italic; animation: fadeIn 0.5s ease-in; font-weight: bold; text-shadow: 0 0 5px rgba(255,182,193,0.5);
-        }
+        #pass-hint { display: none; color: #ffb6c1; font-size: 1rem; margin-top: 10px; font-style: italic; animation: fadeIn 0.5s ease-in; font-weight: bold; text-shadow: 0 0 5px rgba(255,182,193,0.5); }
 
-        #pass-input {
-            padding: 12px 20px; font-size: 1.2rem; border-radius: 25px;
-            border: 2px solid var(--cherry-red); background: rgba(255, 255, 255, 0.1);
-            color: white; outline: none; text-align: center;
-            font-family: 'Poppins', sans-serif; margin-bottom: 20px;
-            transition: all 0.3s ease; width: 80%; max-width: 300px;
-            display: block; margin: 0 auto 20px auto;
-        }
-
+        #pass-input { padding: 12px 20px; font-size: 1.2rem; border-radius: 25px; border: 2px solid var(--cherry-red); background: rgba(255, 255, 255, 0.1); color: white; outline: none; text-align: center; font-family: 'Poppins', sans-serif; margin-bottom: 20px; transition: all 0.3s ease; width: 80%; max-width: 300px; display: block; margin: 0 auto 20px auto; }
         #pass-input:focus { background: rgba(255, 255, 255, 0.2); box-shadow: 0 0 15px rgba(210, 4, 45, 0.5); }
 
-        .switch-btn {
-            background: transparent; color: #fff; border: 2px solid #fff;
-            padding: 12px 35px; font-size: 1.2rem; border-radius: 30px;
-            cursor: pointer; box-shadow: 0 0 15px rgba(255,255,255,0.5);
-            transition: all 0.3s ease; font-family: 'Poppins', sans-serif;
-        }
+        .switch-btn { background: transparent; color: #fff; border: 2px solid #fff; padding: 12px 35px; font-size: 1.2rem; border-radius: 30px; cursor: pointer; box-shadow: 0 0 15px rgba(255,255,255,0.5); transition: all 0.3s ease; font-family: 'Poppins', sans-serif; }
         .switch-btn:hover { background: #fff; color: #000; box-shadow: 0 0 30px rgba(255,255,255,0.8); }
 
         #error-msg { color: var(--cherry-red); margin-top: 15px; display: none; font-weight: bold; font-size: 1.1rem; }
 
-        .magic-dust {
-            position: fixed; pointer-events: none; width: 6px; height: 6px; background: #fff;
-            border-radius: 50%; box-shadow: 0 0 10px #bfa4d8, 0 0 20px var(--cherry-red);
-            z-index: 9999; will-change: transform, opacity; display: none;
-        }
+        .magic-dust { position: fixed; pointer-events: none; width: 6px; height: 6px; background: #fff; border-radius: 50%; box-shadow: 0 0 10px #bfa4d8, 0 0 20px var(--cherry-red); z-index: 9999; display: none; }
 
         #main-screen { display: none; flex-direction: column; align-items: center; padding: 50px 20px; position: relative; z-index: 10; }
-
-        /* 🔥 NEW: Manual Music Override Button */
-        #music-btn {
-            position: fixed; top: 20px; right: 20px; background: var(--cherry-red); color: white;
-            border: 2px solid white; padding: 10px 15px; border-radius: 30px; cursor: pointer;
-            z-index: 10000; font-family: 'Poppins', sans-serif; font-weight: bold;
-            box-shadow: 0 0 15px rgba(210, 4, 45, 0.8); display: none; animation: bounce 2s infinite;
-        }
 
         .photo-container { margin-top: 20px; position: relative; perspective: 1000px; animation: dropDown 1.5s ease-out; z-index: 15; cursor: pointer; }
         .flip-box-inner { width: 250px; height: 250px; text-align: center; transition: transform 0.8s; transform-style: preserve-3d; border-radius: 50%; box-shadow: 0 0 30px rgba(210, 4, 45, 0.5); animation: pulseFrame 3s infinite alternate; }
@@ -135,7 +89,7 @@
         .candle-container { display: flex; justify-content: space-evenly; position: absolute; width: 100%; top: -35px; left: 0; z-index: 5; padding: 0 20px; }
         .candle { width: 12px; height: 40px; background: repeating-linear-gradient(45deg, white, white 5px, var(--cherry-red) 5px, var(--cherry-red) 10px); position: relative; border-radius: 3px; cursor: pointer; outline: none; box-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
         .candle:focus { box-shadow: 0 0 10px #bfa4d8; }
-        .flame { width: 16px; height: 24px; background: gold; border-radius: 50% 50% 20% 20%; position: absolute; top: -24px; left: -2px; animation: flicker 0.5s infinite alternate; box-shadow: 0 0 15px gold, 0 0 30px orange; transition: all 0.3s ease-out; will-change: transform; }
+        .flame { width: 16px; height: 24px; background: gold; border-radius: 50% 50% 20% 20%; position: absolute; top: -24px; left: -2px; animation: flicker 0.5s infinite alternate; box-shadow: 0 0 15px gold, 0 0 30px orange; transition: all 0.3s ease-out; }
         .flame.extinguished { animation: none !important; opacity: 0 !important; transform: scale(0) !important; }
 
         .gifts-section { display: none; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px; animation: dropDown 1s ease;}
@@ -149,10 +103,9 @@
 
         #secret-message { background: linear-gradient(135deg, rgba(210, 4, 45, 0.8), rgba(153, 0, 31, 0.8)); border: 2px solid gold; box-shadow: 0 0 40px rgba(255, 215, 0, 0.4); display: none; z-index: 20; position: relative; }
         #secret-message h2 { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: gold; margin-bottom: 10px;}
+        .petal { position: fixed; top: -10vh; background: linear-gradient(135deg, var(--cherry-red), #ff4d6d); border-radius: 50% 0 50% 50%; z-index: 1; pointer-events: none; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
 
-        .petal { position: fixed; top: -10vh; background: linear-gradient(135deg, var(--cherry-red), #ff4d6d); border-radius: 50% 0 50% 50%; z-index: 1; pointer-events: none; will-change: transform; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
-
-        @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8) translateZ(0); } 100% { opacity: 1; transform: scale(1.1) translateZ(0); } }
+        @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.1); } }
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
         @keyframes dropDown { 0% { transform: translateY(-30px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-15px); } 60% { transform: translateY(-7px); } }
@@ -165,18 +118,12 @@
 </head>
 <body>
 
-    <!-- RELIABLE AUDIO LINKS -->
+    <!-- 🔥 THIS IS THE FIX. IT LOOKS FOR LOCAL FILES ON YOUR COMPUTER 🔥 -->
     <audio id="bg-music" loop preload="auto">
-        <source src="https://assets.mixkit.co/music/preview/mixkit-happy-birthday-piano-version-548.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="error-sound" preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_c6ccf3232f.mp3" type="audio/mpeg">
+        <!-- PUT YOUR DOWNLOADED MP3 FILE IN THE FOLDER AND NAME IT music.mp3 -->
+        <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- 🔥 NEW: Floating Manual Music Button (Only shows if browser blocks auto-music) -->
-    <button id="music-btn" onclick="forcePlayMusic()">🎵 Play Music</button>
-
-    <!-- Password Gate Screen -->
     <div id="dark-room">
         <div id="password-gate">
             <div class="lock-icon">🔒</div>
@@ -185,7 +132,6 @@
             <div class="hint-container">
                 Stuck? Click for a hint! <button class="hint-btn" onclick="toggleHint()" title="Click for a hint">❓</button>
             </div>
-            
             <p id="pass-hint">Hint: That spicy street food you always eat... 🌶️</p>
 
             <input type="text" id="pass-input" placeholder="Type here..." autocomplete="off">
@@ -194,9 +140,7 @@
         </div>
     </div>
 
-    <!-- Main Experience Screen -->
     <div id="main-screen">
-        
         <div class="photo-container" tabindex="0">
             <div class="flip-box-inner">
                 <div class="flip-box-front">
@@ -216,7 +160,6 @@
 
         <div class="message-box" id="msg2" data-text="I have kept some special virtual gifts for you below. But first... make a wish and tap the candles to blow them out!"></div>
 
-        <!-- Redesigned Multi-tier Birthday Cake -->
         <div id="cake-section">
             <div class="cake-wrapper">
                 <div class="plate"></div>
@@ -233,7 +176,6 @@
             <p id="cake-instruction" style="margin-bottom: 15px; font-size: 1.1rem; position: relative; z-index: 20; text-shadow: 1px 1px 3px black;">Tap the candles to put them out! 🎂</p>
         </div>
 
-        <!-- Interactive Gifts -->
         <div class="gifts-section" id="gifts-container">
             <div class="gift-card" tabindex="0" onclick="openGift(this)">
                 <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
@@ -257,23 +199,63 @@
             </div>
         </div>
 
-        <!-- Secret Final Message -->
         <div id="secret-message" class="message-box">
             <h2> SURPRISE! </h2>
             You opened all the gifts! Sending you a big virtual high-five 🙌 Never forget how incredibly awesome you are. Enjoy your special day to the absolute fullest!
         </div>
-
     </div>
 
     <script>
+        // --- 🔥 AUDIO ENGINE FIX FOR IPHONES/SAFARI 🔥 ---
+        let audioCtx;
+        function getAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playPopSound() {
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+                osc.connect(gainNode);
+                gainNode.connect(ctx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(1, ctx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.1);
+            } catch (e) {}
+        }
+
+        // Error beep fallback since we removed the external mp3 link
+        function playErrorSound() {
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+                osc.connect(gainNode);
+                gainNode.connect(ctx.destination);
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(150, ctx.currentTime);
+                gainNode.gain.setValueAtTime(0.5, ctx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.3);
+            } catch (e) {}
+        }
+        // --------------------------------------------------
+
         let openedGiftsCount = 0;
         let blownOutCandles = 0;
-
-        const memories = [
-            "https://via.placeholder.com/250/99001f/FFFFFF?text=Memory+1",
-            "https://via.placeholder.com/250/2d1e3e/FFFFFF?text=Memory+2",
-            "https://via.placeholder.com/250/D2042D/FFFFFF?text=Memory+3"
-        ]; 
+        const memories = ["https://via.placeholder.com/250/99001f/FFFFFF?text=Memory+1", "https://via.placeholder.com/250/2d1e3e/FFFFFF?text=Memory+2", "https://via.placeholder.com/250/D2042D/FFFFFF?text=Memory+3"]; 
         let currentMemory = 0;
 
         document.querySelector('.photo-container').addEventListener('click', function() {
@@ -281,50 +263,25 @@
             inner.style.transform = inner.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
         });
 
-        // Dust Effect
-        const dustPoolSize = 30; const dustPool =[]; let dustIndex = 0; let lastDrawTime = 0; const drawInterval = 25; 
-        for(let i = 0; i < dustPoolSize; i++) {
-            const dust = document.createElement('div');
-            dust.className = 'magic-dust'; document.body.appendChild(dust); dustPool.push(dust);
-        }
-        function createDust(x, y) {
-            const now = Date.now(); if (now - lastDrawTime < drawInterval) return; lastDrawTime = now;
-            const dust = dustPool[dustIndex];
-            dust.style.display = 'none'; void dust.offsetWidth; 
-            dust.style.left = x + 'px'; dust.style.top = y + 'px';
-            dust.style.display = 'block'; dust.style.animation = 'none'; void dust.offsetWidth; 
-            dust.style.animation = 'dustFade 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards';
-            dustIndex = (dustIndex + 1) % dustPoolSize;
-        }
-        window.addEventListener('mousemove', (e) => { createDust(e.clientX, e.clientY); });
-        window.addEventListener('touchmove', (e) => { if(e.touches.length > 0) { createDust(e.touches[0].clientX, e.touches[0].clientY); } }, { passive: true });
-
-        // Toggle Password Hint
         function toggleHint() {
             const hint = document.getElementById('pass-hint');
             hint.style.display = hint.style.display === 'block' ? 'none' : 'block';
         }
 
-        // 🔥 NEW: Check Password and Auto-Play Protection Logic
         function checkPassword() {
+            // Wake up audio exactly on the click event!
+            getAudioContext(); 
+
             const input = document.getElementById('pass-input').value.toLowerCase().replace(/\s+/g, '');
             const errorMsg = document.getElementById('error-msg');
 
             if (input === 'panipuri') {
                 errorMsg.style.display = 'none';
                 
-                // Attempt to play music
+                // Play local background music
                 const bgMusic = document.getElementById('bg-music');
                 bgMusic.volume = 0.5; 
-                let playPromise = bgMusic.play();
-                
-                // If the browser blocks it, show the manual "Play Music" button!
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        console.log("Browser strictly blocked auto-music. Showing manual button.");
-                        document.getElementById('music-btn').style.display = 'block';
-                    });
-                }
+                bgMusic.play().catch(e => console.log("Make sure you downloaded music.mp3 and put it in the folder!", e));
                 
                 turnOnLights(); 
             } else {
@@ -335,19 +292,9 @@
             }
         }
 
-        // Trigger on "Enter" key press
         document.getElementById('pass-input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') checkPassword();
         });
-
-        // 🔥 NEW: Force play function for the override button
-        function forcePlayMusic() {
-            const bgMusic = document.getElementById('bg-music');
-            bgMusic.volume = 0.5;
-            bgMusic.play();
-            // Hide the button once she clicks it and music starts!
-            document.getElementById('music-btn').style.display = 'none';
-        }
 
         function createStars() {
             const starContainer = document.createElement('div');
@@ -355,7 +302,6 @@
             starContainer.style.width = '100vw'; starContainer.style.height = '100vh';
             starContainer.style.zIndex = '0'; starContainer.style.pointerEvents = 'none';
             document.body.appendChild(starContainer);
-
             for (let i = 0; i < 40; i++) {
                 const star = document.createElement('div'); star.classList.add('star');
                 star.style.width = Math.random() * 3 + 'px'; star.style.height = star.style.width;
@@ -367,7 +313,6 @@
 
         function turnOnLights() {
             playPopSound(); 
-            
             const darkRoom = document.getElementById('dark-room');
             darkRoom.style.opacity = '0';
             document.body.classList.add('lights-on');
@@ -376,12 +321,10 @@
                 darkRoom.style.display = 'none';
                 document.getElementById('main-screen').style.display = 'flex';
                 createStars(); shootBigConfetti(); createRosePetals(); 
-                
                 setInterval(() => {
                     currentMemory = (currentMemory + 1) % memories.length;
                     document.getElementById('carousel-img').src = memories[currentMemory];
                 }, 3000);
-
                 setTimeout(startTypewriter, 1500); 
             }, 800);
         }
@@ -389,15 +332,11 @@
         async function startTypewriter() {
             const msg1 = document.getElementById('msg1');
             const msg2 = document.getElementById('msg2');
-            
             await typeText(msg1, 35); 
             await new Promise(r => setTimeout(r, 500)); 
             await typeText(msg2, 35);
-            
             document.getElementById('cake-section').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('cake-section').scrollIntoView({ behavior: 'smooth', block: 'end' });
-            }, 500);
+            setTimeout(() => { document.getElementById('cake-section').scrollIntoView({ behavior: 'smooth', block: 'end' }); }, 500);
         }
 
         function typeText(element, speed) {
@@ -416,40 +355,29 @@
         function blowOutCandle(candleElement) {
             const flameElement = candleElement.querySelector('.flame');
             if (!flameElement || flameElement.classList.contains('extinguished')) return;
-
             flameElement.classList.add('extinguished');
             candleElement.style.pointerEvents = 'none'; 
-            
             blownOutCandles++; 
             playPopSound();
 
             if (blownOutCandles === 3) {
                 document.getElementById('cake-instruction').innerText = "Yay! Happy Birthday! 🥳";
                 shootBigConfetti();
-                
                 setTimeout(() => {
                     document.getElementById('gifts-container').style.display = 'flex';
-                    setTimeout(() => {
-                        document.getElementById('gifts-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 500);
+                    setTimeout(() => { document.getElementById('gifts-container').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 500);
                 }, 1000);
             }
         }
 
         function openGift(card) {
             if (card.classList.contains('opened')) return; 
-
             card.classList.add('opened'); 
             card.style.pointerEvents = 'none'; 
-            
-            const button = card.querySelector('.btn');
-            const content = card.querySelector('.gift-content');
-            
-            content.style.display = 'block'; button.style.display = 'none';
-
+            card.querySelector('.btn').style.display = 'none';
+            card.querySelector('.gift-content').style.display = 'block'; 
             playPopSound(); 
             confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 }, colors:['#D2042D', '#ffffff'] });
-            
             openedGiftsCount++;
 
             if (openedGiftsCount === 4) {
@@ -457,9 +385,7 @@
                     const secretMsg = document.getElementById('secret-message');
                     secretMsg.style.display = 'block'; secretMsg.style.animation = 'fadeIn 2s ease-in-out';
                     shootBigConfetti();
-                    setTimeout(() => {
-                        secretMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 500);
+                    setTimeout(() => { secretMsg.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 500);
                 }, 1000);
             }
         }
@@ -486,31 +412,6 @@
                 petal.style.animation = `fallPetal ${duration}s linear ${delay}s infinite`;
                 container.appendChild(petal);
             }
-        }
-
-        function playErrorSound() {
-            const audio = document.getElementById('error-sound');
-            audio.currentTime = 0; 
-            audio.volume = 0.6;
-            audio.play().catch(e => console.log("Audio play blocked."));
-        }
-
-        // Bulletproof Pop Sound (JavaScript Audio API)
-        function playPopSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                osc.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
-                gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-                osc.start(audioCtx.currentTime);
-                osc.stop(audioCtx.currentTime + 0.1);
-            } catch (e) { console.log("Web Audio API not supported on this device."); }
         }
 
         function shootBigConfetti() {
