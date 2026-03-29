@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Palak</title>
     
-    <!-- Preload assets for faster experience -->
     <link rel="preload" href="tata.jpg" as="image">
-    <!-- Preload new audio files -->
-    <link rel="preload" href="https://cdn.pixabay.com/download/audio/2022/08/31/audio_14c62e5b8e.mp3" as="audio"> <!-- Soft Piano Birthday -->
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -18,7 +15,6 @@
             --cherry-dark: #99001f;
             --black-lavender-1: #1a1124;
             --black-lavender-2: #2d1e3e;
-            --purple-glow: #4a235a;
             --text-light: #f5f0fa;
         }
 
@@ -34,9 +30,9 @@
             cursor: url('https://img.icons8.com/fluency/24/magic-wand.png'), auto;
         }
 
-        /* 🌟 NEW: Dynamic Animated Background Gradient */
+        /* Animated Background using your original colors */
         body.lights-on {
-            background: linear-gradient(135deg, var(--black-lavender-1), var(--black-lavender-2), var(--purple-glow));
+            background: linear-gradient(135deg, var(--black-lavender-1), var(--black-lavender-2), var(--black-lavender-1));
             background-size: 200% 200%;
             animation: gradientShift 10s ease infinite;
         }
@@ -64,17 +60,18 @@
 
         .lock-icon { font-size: 3rem; margin-bottom: 10px; }
         
-        .question-text { font-size: 1.3rem; margin-bottom: 15px; color: #bfa4d8; font-weight: 600; display: inline-block; }
+        .question-text { font-size: 1.3rem; margin-bottom: 5px; color: #bfa4d8; font-weight: 600; }
         
-        /* 🌟 NEW: Password Hint Styling */
+        /* Hint Styling */
+        .hint-container { margin-bottom: 15px; font-size: 0.95rem; color: #ccc; }
         .hint-btn {
-            background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer;
-            margin-left: 10px; opacity: 0.7; transition: opacity 0.3s;
+            background: rgba(255,255,255,0.1); border: 1px solid white; color: #fff; font-size: 1rem; 
+            cursor: pointer; padding: 2px 8px; border-radius: 50%; margin-left: 5px; transition: all 0.3s;
         }
-        .hint-btn:hover { opacity: 1; }
+        .hint-btn:hover { background: white; color: black; box-shadow: 0 0 10px white; }
         #pass-hint {
-            display: none; color: #ffb6c1; font-size: 0.9rem; margin-bottom: 15px;
-            font-style: italic; animation: fadeIn 0.5s ease-in;
+            display: none; color: #ffb6c1; font-size: 1rem; margin-top: 10px;
+            font-style: italic; animation: fadeIn 0.5s ease-in; font-weight: bold; text-shadow: 0 0 5px rgba(255,182,193,0.5);
         }
 
         #pass-input {
@@ -127,7 +124,7 @@
         h1 { font-family: 'Dancing Script', cursive; font-size: 4rem; margin-top: 20px; color: var(--cherry-red); text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); text-align: center;}
         .nickname { font-size: 1.5rem; color: #bfa4d8; margin-bottom: 20px; letter-spacing: 2px; }
 
-        /* 🌟 NEW: Glassmorphism Design */
+        /* Glassmorphism Design */
         .message-box {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -137,7 +134,7 @@
             display: none; min-height: 80px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
 
-        /* 🌟 NEW: Better Multi-Tiered CSS Cake */
+        /* Better Multi-Tiered CSS Cake */
         #cake-section { display: none; margin: 60px 0 40px 0; text-align: center; animation: fadeIn 2s ease-in; }
         
         .cake-wrapper { position: relative; width: 220px; height: 180px; margin: 0 auto 30px auto; z-index: 10;}
@@ -157,7 +154,7 @@
 
         .gifts-section { display: none; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px; animation: dropDown 1s ease;}
         
-        /* 🌟 NEW: Glassmorphism for gifts */
+        /* Glassmorphism for gifts */
         .gift-card { 
             background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(210, 4, 45, 0.4); border-radius: 15px; width: 220px; padding: 20px; text-align: center; 
@@ -188,18 +185,18 @@
 </head>
 <body>
 
-    <!-- 🌟 NEW: Preloaded Proper Audio Tags -->
-    <!-- Soft Peaceful Piano Birthday Music -->
+    <!-- RELIABLE AUDIO LINKS -->
+    <!-- Soft Piano Birthday Song (Wikimedia Commons - highly reliable) -->
     <audio id="bg-music" loop preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/08/31/audio_14c62e5b8e.mp3" type="audio/mpeg">
+        <source src="https://upload.wikimedia.org/wikipedia/commons/4/4b/Happy_Birthday_to_You_%28Piano%29.ogg" type="audio/ogg">
     </audio>
-    <!-- Cute Error Sound -->
+    <!-- Cute Error Sound (Keeping the one you said is OK!) -->
     <audio id="error-sound" preload="auto">
         <source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_c6ccf3232f.mp3" type="audio/mpeg">
     </audio>
-    <!-- Satisfying Pop/Click Sound -->
+    <!-- Bubble Pop Sound (Google Official Sound Library - highly reliable) -->
     <audio id="pop-sound" preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7314781eb8.mp3" type="audio/mpeg">
+        <source src="https://actions.google.com/sounds/v1/cartoon/pop_lips.ogg" type="audio/ogg">
     </audio>
 
     <!-- Password Gate Screen -->
@@ -207,11 +204,13 @@
         <div id="password-gate">
             <div class="lock-icon">🔒</div>
             
-            <div>
-                <p class="question-text">Name of your favourite food?</p>
-                <button class="hint-btn" onclick="toggleHint()" title="Click for a hint">❓</button>
+            <p class="question-text">Name of your favourite food?</p>
+            
+            <!-- EXPLICIT HINT MENTION -->
+            <div class="hint-container">
+                Stuck? Click for a hint! <button class="hint-btn" onclick="toggleHint()" title="Click for a hint">❓</button>
             </div>
-            <!-- 🌟 NEW: Password Hint -->
+            
             <p id="pass-hint">Hint: That spicy street food we always eat... 🌶️</p>
 
             <input type="text" id="pass-input" placeholder="Type here..." autocomplete="off">
@@ -242,7 +241,7 @@
 
         <div class="message-box" id="msg2" data-text="I have kept some special virtual gifts for you below. But first... make a wish and tap the candles to blow them out!"></div>
 
-        <!-- 🌟 NEW: Redesigned Multi-tier Birthday Cake -->
+        <!-- Redesigned Multi-tier Birthday Cake -->
         <div id="cake-section">
             <div class="cake-wrapper">
                 <div class="plate"></div>
@@ -329,7 +328,7 @@
         window.addEventListener('mousemove', (e) => { createDust(e.clientX, e.clientY); });
         window.addEventListener('touchmove', (e) => { if(e.touches.length > 0) { createDust(e.touches[0].clientX, e.touches[0].clientY); } }, { passive: true });
 
-        // 🌟 NEW: Toggle Password Hint
+        // Toggle Password Hint
         function toggleHint() {
             const hint = document.getElementById('pass-hint');
             hint.style.display = hint.style.display === 'block' ? 'none' : 'block';
@@ -346,7 +345,7 @@
                 errorMsg.style.display = 'block';
                 errorMsg.style.animation = 'none'; void errorMsg.offsetWidth; 
                 errorMsg.style.animation = 'shake 0.4s ease';
-                playErrorSound(); // 🌟 NEW: Call new error sound
+                playErrorSound(); 
             }
         }
 
@@ -472,7 +471,7 @@
             }
         }
 
-        // 🌟 NEW: Confetti on hover for gift cards
+        // Confetti on hover for gift cards
         document.querySelectorAll('.gift-card').forEach(card => {
             card.addEventListener('mouseenter', function() {
                 if(!this.classList.contains('opened')) {
@@ -497,18 +496,18 @@
             }
         }
 
-        // 🌟 NEW: Proper Audio playing functions using HTML5 Audio tags
+        // Proper Audio playing functions
         function playErrorSound() {
             const audio = document.getElementById('error-sound');
-            audio.currentTime = 0; // reset to start
+            audio.currentTime = 0; 
             audio.volume = 0.6;
             audio.play().catch(e => console.log("Audio play blocked."));
         }
 
         function playPopSound() {
             const audio = document.getElementById('pop-sound');
-            audio.currentTime = 0; // reset to start
-            audio.volume = 0.5;
+            audio.currentTime = 0; 
+            audio.volume = 1.0; // Turned up the volume so it's clearer
             audio.play().catch(e => console.log("Audio play blocked."));
         }
 
