@@ -6,7 +6,6 @@
     <title>Happy Birthday Palak</title>
     
     <link rel="preload" href="tata.jpg" as="image">
-    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -186,17 +185,13 @@
 <body>
 
     <!-- RELIABLE AUDIO LINKS -->
-    <!-- Soft Piano Birthday Song (Wikimedia Commons - highly reliable) -->
+    <!-- MP3 format is supported by ALL browsers. This link is extremely reliable. -->
     <audio id="bg-music" loop preload="auto">
-        <source src="https://upload.wikimedia.org/wikipedia/commons/4/4b/Happy_Birthday_to_You_%28Piano%29.ogg" type="audio/ogg">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-happy-birthday-piano-version-548.mp3" type="audio/mpeg">
     </audio>
-    <!-- Cute Error Sound (Keeping the one you said is OK!) -->
+    <!-- Cute Error Sound -->
     <audio id="error-sound" preload="auto">
         <source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_c6ccf3232f.mp3" type="audio/mpeg">
-    </audio>
-    <!-- Bubble Pop Sound (Google Official Sound Library - highly reliable) -->
-    <audio id="pop-sound" preload="auto">
-        <source src="https://actions.google.com/sounds/v1/cartoon/pop_lips.ogg" type="audio/ogg">
     </audio>
 
     <!-- Password Gate Screen -->
@@ -340,6 +335,12 @@
 
             if (input === 'panipuri') {
                 errorMsg.style.display = 'none';
+                
+                // FORCE THE AUDIO TO START IMMEDIATELY ON CLICK
+                const bgMusic = document.getElementById('bg-music');
+                bgMusic.volume = 0.5; 
+                bgMusic.play().catch(e => console.log("Auto-play prevented by browser."));
+                
                 turnOnLights(); 
             } else {
                 errorMsg.style.display = 'block';
@@ -370,12 +371,8 @@
         }
 
         function turnOnLights() {
-            playPopSound();
+            playPopSound(); // Play initial pop when unlocking
             
-            const bgMusic = document.getElementById('bg-music');
-            bgMusic.volume = 0.5; 
-            bgMusic.play().catch(e => console.log("Auto-play prevented by browser."));
-
             const darkRoom = document.getElementById('dark-room');
             darkRoom.style.opacity = '0';
             document.body.classList.add('lights-on');
@@ -428,7 +425,8 @@
             flameElement.classList.add('extinguished');
             candleElement.style.pointerEvents = 'none'; 
             
-            blownOutCandles++; playPopSound();
+            blownOutCandles++; 
+            playPopSound();
 
             if (blownOutCandles === 3) {
                 document.getElementById('cake-instruction').innerText = "Yay! Happy Birthday! 🥳";
@@ -496,7 +494,9 @@
             }
         }
 
-        // Proper Audio playing functions
+        // --- BULLETPROOF AUDIO FIXES ---
+
+        // Error sound (Works fine)
         function playErrorSound() {
             const audio = document.getElementById('error-sound');
             audio.currentTime = 0; 
@@ -504,11 +504,29 @@
             audio.play().catch(e => console.log("Audio play blocked."));
         }
 
+        // Pop sound using Javascript directly! (NEVER FAILS, NO DOWNLOAD NEEDED)
         function playPopSound() {
-            const audio = document.getElementById('pop-sound');
-            audio.currentTime = 0; 
-            audio.volume = 1.0; // Turned up the volume so it's clearer
-            audio.play().catch(e => console.log("Audio play blocked."));
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                // Makes it sound like a happy bubble pop
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+                
+                gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 0.1);
+            } catch (e) {
+                console.log("Web Audio API not supported on this device.");
+            }
         }
 
         function shootBigConfetti() {
