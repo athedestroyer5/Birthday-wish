@@ -92,15 +92,23 @@
         .flame.extinguished { animation: none !important; opacity: 0 !important; transform: scale(0) !important; }
 
         .gifts-section { display: none; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px; animation: dropDown 1s ease;}
-        .gift-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(210, 4, 45, 0.4); border-radius: 15px; width: 220px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.4s ease; z-index: 20; position: relative; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .gift-card:hover, .gift-card:focus { background: rgba(210, 4, 45, 0.15); border-color: rgba(255,255,255,0.4); }
+        .gift-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(210, 4, 45, 0.4); border-radius: 15px; width: 220px; padding: 20px; text-align: center; transition: all 0.4s ease; z-index: 20; position: relative; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: flex; flex-direction: column; align-items: center;}
         
-        .gift-card:not(#gift-card-4):hover { transform: translateY(-10px); box-shadow: 0 10px 25px rgba(210, 4, 45, 0.4); }
+        .gift-card.clickable-card { cursor: pointer; }
+        .gift-card.clickable-card:hover, .gift-card.clickable-card:focus { background: rgba(210, 4, 45, 0.15); border-color: rgba(255,255,255,0.4); }
+        .gift-card.clickable-card:not(#gift-card-4):hover { transform: translateY(-10px); box-shadow: 0 10px 25px rgba(210, 4, 45, 0.4); }
 
         .gift-icon img { width: 70px; animation: bounce 3s infinite; }
-        .gift-content { display: none; margin-top: 15px; font-size: 0.95rem; color: #fff; font-weight: bold; text-shadow: 1px 1px 2px black;}
+        
+        /* SCRATCH CARD STYLES */
+        .scratch-container { position: relative; width: 100%; height: 100px; margin-top: 15px; border-radius: 10px; overflow: hidden; }
+        .scratch-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; touch-action: none; cursor: pointer; }
+        .gift-content { display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-size: 0.95rem; color: #fff; font-weight: bold; text-shadow: 1px 1px 2px black; padding: 5px; }
+        
+        /* Adjust for normal cards vs scratch cards */
+        .normal-content { display: none; margin-top: 15px; font-size: 0.95rem; color: #fff; font-weight: bold; text-shadow: 1px 1px 2px black; }
 
-        .btn { background: var(--cherry-red); color: white; border: none; padding: 10px 20px; font-size: 1.1rem; border-radius: 30px; cursor: pointer; font-weight: 600; box-shadow: 0 5px 15px rgba(210, 4, 45, 0.4); transition: transform 0.3s ease; position: relative; z-index: 20; }
+        .btn { background: var(--cherry-red); color: white; border: none; padding: 10px 20px; font-size: 1.1rem; border-radius: 30px; cursor: pointer; font-weight: 600; box-shadow: 0 5px 15px rgba(210, 4, 45, 0.4); transition: transform 0.3s ease; position: relative; z-index: 20; margin-top: 15px;}
         .btn:hover { transform: scale(1.1); }
 
         #secret-message { background: linear-gradient(135deg, rgba(210, 4, 45, 0.8), rgba(153, 0, 31, 0.8)); border: 2px solid gold; box-shadow: 0 0 40px rgba(255, 215, 0, 0.4); display: none; z-index: 20; position: relative; }
@@ -112,55 +120,56 @@
 
         .petal { position: fixed; top: -10vh; background: linear-gradient(135deg, var(--cherry-red), #ff4d6d); border-radius: 50% 0 50% 50%; z-index: 1; pointer-events: none; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
 
-        /* NEW RIBBON STYLE */
+        /* RIBBON STYLE */
         #ribbon-btn {
-            position: fixed; 
-            bottom: 40px; 
-            right: -250px; /* Initially hidden entirely */
-            background: linear-gradient(135deg, var(--cherry-red), #ff4d6d);
-            color: #fff; 
-            font-family: 'Poppins', sans-serif; 
-            font-weight: bold; 
-            font-size: 1.1rem;
-            padding: 12px 20px 12px 30px; 
-            border: 2px solid #fff;
-            border-right: none;
-            border-radius: 30px 0 0 30px; 
-            cursor: pointer;
-            box-shadow: -5px 5px 15px rgba(0,0,0,0.5); 
-            z-index: 1000; 
-            transition: right 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: 180px; /* Fixed width */
+            position: fixed; bottom: 40px; right: -250px; 
+            background: linear-gradient(135deg, var(--cherry-red), #ff4d6d); color: #fff; 
+            font-family: 'Poppins', sans-serif; font-weight: bold; font-size: 1.1rem;
+            padding: 12px 20px 12px 30px; border: 2px solid #fff; border-right: none;
+            border-radius: 30px 0 0 30px; cursor: pointer; box-shadow: -5px 5px 15px rgba(0,0,0,0.5); 
+            z-index: 1000; transition: right 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 180px; 
         }
-        /* State where it's half inside, half outside */
         #ribbon-btn.show-ribbon { right: -85px; }
-        /* Pulls out fully on hover */
         #ribbon-btn.show-ribbon:hover { right: 0; box-shadow: -5px 5px 25px rgba(210, 4, 45, 0.8); }
         
-        #eat-modal {
-            position: fixed; inset: 0; background: var(--modal-bg); z-index: 2000; display: none;
-            justify-content: center; align-items: center; flex-direction: column; text-align: center;
-        }
+        #eat-modal { position: fixed; inset: 0; background: var(--modal-bg); z-index: 2000; display: none; justify-content: center; align-items: center; flex-direction: column; text-align: center; }
         #eat-title { font-family: 'Dancing Script', cursive; font-size: 3rem; color: #ffb6c1; margin-bottom: 30px; animation: fadeIn 1s ease; pointer-events: none; }
         
         #big-cake-container { position: relative; cursor: pointer; transform: scale(1.5); transition: transform 0.1s; }
         #big-cake-container:active { transform: scale(1.4); }
         
-        /* BITE MARK ANIMATION */
-        .bite-mark { 
-            position: absolute; 
-            background: var(--modal-bg); 
-            border-radius: 50%; 
-            pointer-events: none; 
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.9); 
-            transform: scale(0);
-            animation: bitePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
+        .bite-mark { position: absolute; background: var(--modal-bg); border-radius: 50%; pointer-events: none; box-shadow: inset 0 0 10px rgba(0,0,0,0.9); transform: scale(0); animation: bitePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         .cake-shake-anim { animation: shakeCake 0.3s ease; }
+
+        /* --- CERTIFICATE MODAL STYLES --- */
+        #cert-modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 3000; display: none;
+            justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 1s ease;
+        }
+        .cert-box {
+            background: #fff8e7; border: 12px solid #d4af37; padding: 40px 30px; border-radius: 10px;
+            text-align: center; max-width: 600px; width: 100%; color: #333; position: relative;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.6); animation: dropDown 1s ease forwards;
+        }
+        .cert-box::before { content: ''; position: absolute; inset: 6px; border: 2px dashed #b8860b; pointer-events: none; }
+        .cert-header { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #99001f; margin-bottom: 5px; line-height: 1.2; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);}
+        .cert-sub { font-family: 'Poppins', sans-serif; font-size: 1rem; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 15px; }
+        .cert-name { font-family: 'Dancing Script', cursive; font-size: 2.8rem; color: #d2042d; margin: 15px 0; border-bottom: 2px solid #d4af37; display: inline-block; padding: 0 20px;}
+        .cert-body { font-family: 'Poppins', sans-serif; font-size: 1.05rem; line-height: 1.7; color: #444; margin: 20px 0; font-weight: 500; }
+        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px; padding: 0 20px; font-family: 'Dancing Script', cursive; font-size: 1.5rem; color: #99001f;}
+        
+        .wax-seal {
+            background: #99001f; color: #d4af37; width: 90px; height: 90px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; font-weight: bold;
+            margin: 0 auto; cursor: pointer; box-shadow: inset 0 0 15px #550000, 0 5px 15px rgba(0,0,0,0.5);
+            font-family: 'Dancing Script', cursive; font-size: 1.1rem; line-height: 1.2; border: 3px solid #d4af37;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 10; position: relative;
+        }
+        .wax-seal:hover { transform: scale(1.15) rotate(-5deg); background: #b30024; }
 
         @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.1); } }
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-        @keyframes dropDown { 0% { transform: translateY(-30px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        @keyframes dropDown { 0% { transform: translateY(-50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-15px); } 60% { transform: translateY(-7px); } }
         @keyframes pulseFrame { 0% { box-shadow: 0 0 15px rgba(210, 4, 45, 0.5); } 100% { box-shadow: 0 0 35px rgba(210, 4, 45, 0.9); } }
         @keyframes flicker { 0% { transform: scale(1) rotate(-2deg); opacity: 0.9; } 100% { transform: scale(1.1) rotate(2deg); opacity: 1; } }
@@ -228,26 +237,39 @@
             <p id="cake-instruction" style="margin-bottom: 15px; font-size: 1.1rem; position: relative; z-index: 20; text-shadow: 1px 1px 3px black;">Tap the candles to put them out! 🎂</p>
         </div>
 
+        <!-- GIFTS SECTION -->
         <div class="gifts-section" id="gifts-container">
-            <div class="gift-card" tabindex="0" onclick="openGift(this)">
+            
+            <!-- Gift 1: Scratch Card -->
+            <div class="gift-card" id="gift-card-1">
                 <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
-                <button class="btn" tabindex="-1">Open Gift 1</button>
-                <div class="gift-content">A box full of virtual chocolates and lots of respect for how awesome you are!</div>
+                <div class="scratch-container">
+                    <canvas id="scratch-1" class="scratch-canvas"></canvas>
+                    <div class="gift-content" style="display: flex;">A box full of virtual chocolates & lots of respect!</div>
+                </div>
             </div>
-            <div class="gift-card" tabindex="0" onclick="openGift(this)">
+
+            <!-- Gift 2: Normal Click -->
+            <div class="gift-card clickable-card" id="gift-card-2" tabindex="0" onclick="openNormalGift(this)">
                 <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
                 <button class="btn" tabindex="-1">Open Gift 2</button>
-                <div class="gift-content">Endless blessings for your bright future and career. May you achieve all your goals this year!</div>
+                <div class="normal-content">Endless blessings for your bright future and career!</div>
             </div>
-            <div class="gift-card" tabindex="0" onclick="openGift(this)">
+
+            <!-- Gift 3: Scratch Card -->
+            <div class="gift-card" id="gift-card-3">
                 <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
-                <button class="btn" tabindex="-1">Open Gift 3</button>
-                <div class="gift-content">A promise to always support you as a good friend whenever you need it.</div>
+                <div class="scratch-container">
+                    <canvas id="scratch-3" class="scratch-canvas"></canvas>
+                    <div class="gift-content" style="display: flex;">A promise to always support you whenever you need it.</div>
+                </div>
             </div>
-            <div class="gift-card" id="gift-card-4" tabindex="0" onclick="openGift(this)">
+
+            <!-- Gift 4: Dodging -->
+            <div class="gift-card clickable-card" id="gift-card-4" tabindex="0" onclick="openNormalGift(this)">
                 <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
                 <button class="btn" tabindex="-1">Open Gift 4</button>
-                <div class="gift-content">You're one of the best online friends I've met!</div>
+                <div class="normal-content">You're one of the best online friends I've met!</div>
             </div>
         </div>
 
@@ -277,6 +299,26 @@
         </div>
     </div>
 
+    <!-- CERTIFICATE MODAL -->
+    <div id="cert-modal">
+        <div class="cert-box">
+            <div class="cert-header">Certificate of Awesomeness</div>
+            <div class="cert-sub">Proudly Presented To</div>
+            <div class="cert-name">Palak (aka tatatae0)</div>
+            
+            <div class="cert-body">
+                Yeh praman patra (certificate) officially declare karta hai ki tum iss saal ki sabse cute, thodi si dramebaaz, aur sabse amazing dost ho! 🏆 <br><br>
+                Tumhara overthinking level aur Panipuri khane ki capacity, dono completely out of this world hai. Aise hi haste raho aur mera dimaag khaate raho! Happy Birthday! 🎉
+            </div>
+            
+            <div class="cert-footer">
+                <div>Issued by:<br><span style="color: #333; font-size: 1.2rem; font-family:'Poppins',sans-serif;">Ath</span></div>
+                <div class="wax-seal" onclick="closeCertificate()">Stamp &<br>Approve!</div>
+                <div>Verified by:<br><span style="color: #333; font-size: 1.2rem; font-family:'Poppins',sans-serif;">God 🙏</span></div>
+            </div>
+        </div>
+    </div>
+
     <script>
         let audioCtx;
         function getAudioContext() {
@@ -301,13 +343,10 @@
 
         function playErrorSound() {
             try {
-                const ctx = getAudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
+                const ctx = getAudioContext(); const osc = ctx.createOscillator(); const gain = ctx.createGain();
                 osc.connect(gain); gain.connect(ctx.destination);
                 osc.type = 'triangle'; osc.frequency.setValueAtTime(150, ctx.currentTime);
-                gain.gain.setValueAtTime(0.5, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.5, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
                 osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.3);
             } catch (e) {}
         }
@@ -317,13 +356,11 @@
                 const ctx = getAudioContext();
                 for (let i = 0; i < 3; i++) {
                     setTimeout(() => {
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
+                        const osc = ctx.createOscillator(); const gain = ctx.createGain();
                         osc.connect(gain); gain.connect(ctx.destination);
                         osc.type = 'square'; osc.frequency.setValueAtTime(150, ctx.currentTime);
                         osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.1);
-                        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                        gain.gain.setValueAtTime(0.3, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
                         osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.1);
                     }, i * 120); 
                 }
@@ -332,14 +369,11 @@
 
         function playBurpSound() {
             try {
-                const ctx = getAudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
+                const ctx = getAudioContext(); const osc = ctx.createOscillator(); const gain = ctx.createGain();
                 osc.connect(gain); gain.connect(ctx.destination);
                 osc.type = 'sawtooth'; osc.frequency.setValueAtTime(70, ctx.currentTime);
                 osc.frequency.linearRampToValueAtTime(30, ctx.currentTime + 0.5);
-                gain.gain.setValueAtTime(0.8, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                gain.gain.setValueAtTime(0.8, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
                 osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.5);
             } catch (e) {}
         }
@@ -370,26 +404,20 @@
             if (input === 'panipuri') {
                 errorMsg.style.display = 'none';
                 const bgMusic = document.getElementById('bg-music');
-                bgMusic.volume = 0.5; 
-                bgMusic.play().catch(e => console.log("Music error", e));
+                bgMusic.volume = 0.5; bgMusic.play().catch(e => console.log("Music error", e));
                 turnOnLights(); 
             } else {
-                errorMsg.style.display = 'block';
-                errorMsg.style.animation = 'none'; void errorMsg.offsetWidth; 
-                errorMsg.style.animation = 'shake 0.4s ease';
-                playErrorSound(); 
+                errorMsg.style.display = 'block'; errorMsg.style.animation = 'none'; void errorMsg.offsetWidth; 
+                errorMsg.style.animation = 'shake 0.4s ease'; playErrorSound(); 
             }
         }
 
-        document.getElementById('pass-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') checkPassword();
-        });
+        document.getElementById('pass-input').addEventListener('keypress', function(e) { if (e.key === 'Enter') checkPassword(); });
 
         function createStars() {
             const starContainer = document.createElement('div');
             starContainer.style.position = 'fixed'; starContainer.style.top = '0'; starContainer.style.left = '0';
-            starContainer.style.width = '100vw'; starContainer.style.height = '100vh';
-            starContainer.style.zIndex = '0'; starContainer.style.pointerEvents = 'none';
+            starContainer.style.width = '100vw'; starContainer.style.height = '100vh'; starContainer.style.zIndex = '0'; starContainer.style.pointerEvents = 'none';
             document.body.appendChild(starContainer);
             for (let i = 0; i < 40; i++) {
                 const star = document.createElement('div'); star.classList.add('star');
@@ -402,8 +430,7 @@
 
         function turnOnLights() {
             playPopSound(); 
-            const darkRoom = document.getElementById('dark-room');
-            darkRoom.style.opacity = '0';
+            const darkRoom = document.getElementById('dark-room'); darkRoom.style.opacity = '0';
             document.body.classList.add('lights-on');
             
             setTimeout(() => {
@@ -419,24 +446,16 @@
         }
 
         async function startTypewriter() {
-            const msg1 = document.getElementById('msg1');
-            const msg2 = document.getElementById('msg2');
-            await typeText(msg1, 35); 
-            await new Promise(r => setTimeout(r, 500)); 
-            await typeText(msg2, 35);
+            const msg1 = document.getElementById('msg1'); const msg2 = document.getElementById('msg2');
+            await typeText(msg1, 35); await new Promise(r => setTimeout(r, 500)); await typeText(msg2, 35);
             document.getElementById('cake-section').style.display = 'block';
             setTimeout(() => { document.getElementById('cake-section').scrollIntoView({ behavior: 'smooth', block: 'end' }); }, 500);
         }
 
         function typeText(element, speed) {
             return new Promise(resolve => {
-                const text = element.getAttribute('data-text');
-                element.style.display = 'block'; element.innerHTML = ''; let i = 0;
-                function type() {
-                    if (i < text.length) {
-                        element.innerHTML += text.charAt(i); i++; setTimeout(type, speed);
-                    } else { resolve(); }
-                }
+                const text = element.getAttribute('data-text'); element.style.display = 'block'; element.innerHTML = ''; let i = 0;
+                function type() { if (i < text.length) { element.innerHTML += text.charAt(i); i++; setTimeout(type, speed); } else { resolve(); } }
                 type();
             });
         }
@@ -444,48 +463,129 @@
         function blowOutCandle(candleElement) {
             const flameElement = candleElement.querySelector('.flame');
             if (!flameElement || flameElement.classList.contains('extinguished')) return;
-            flameElement.classList.add('extinguished');
-            candleElement.style.pointerEvents = 'none'; 
-            blownOutCandles++; 
-            playPopSound();
+            flameElement.classList.add('extinguished'); candleElement.style.pointerEvents = 'none'; 
+            blownOutCandles++; playPopSound();
 
             if (blownOutCandles === 3) {
                 document.getElementById('cake-instruction').innerText = "Yay! Happy Birthday! 🥳";
                 shootBigConfetti();
                 setTimeout(() => {
                     document.getElementById('gifts-container').style.display = 'flex';
+                    // Initialize Scratch cards now that they are visible
+                    initScratchCard('scratch-1', document.getElementById('gift-card-1'));
+                    initScratchCard('scratch-3', document.getElementById('gift-card-3'));
                     setTimeout(() => { document.getElementById('gifts-container').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 500);
                 }, 1000);
             }
         }
 
+        // --- SCRATCH CARD LOGIC ---
+        function initScratchCard(canvasId, cardElement) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            let isDrawing = false; let lastX = 0, lastY = 0; let isScratched = false;
+
+            // Set canvas exact size
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            // Draw foil
+            ctx.fillStyle = '#c0c0c0'; // Silver foil
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Add subtle pattern and text
+            ctx.font = 'bold 16px Poppins';
+            ctx.fillStyle = '#555';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Scratch Me! 🪙', canvas.width/2, canvas.height/2);
+
+            function getMousePos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return { x: clientX - rect.left, y: clientY - rect.top };
+            }
+
+            function scratch(e) {
+                if (!isDrawing || isScratched) return;
+                if(e.cancelable) e.preventDefault(); // prevent scrolling on mobile
+                const pos = getMousePos(e);
+                
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.lineWidth = 30;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+                
+                lastX = pos.x; lastY = pos.y;
+                checkScratched();
+            }
+
+            // Simple heuristic to check if enough is scratched
+            let checkCounter = 0;
+            function checkScratched() {
+                checkCounter++;
+                if(checkCounter % 5 !== 0) return; // Don't check every single frame
+                
+                const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+                let cleared = 0;
+                // Check every 40th pixel to save performance
+                for(let i = 3; i < pixels.length; i += 40) { if(pixels[i] === 0) cleared++; }
+                
+                // If roughly 40% is cleared
+                if(cleared > (pixels.length / 40) * 0.4) {
+                    isScratched = true;
+                    canvas.style.transition = 'opacity 0.5s ease';
+                    canvas.style.opacity = '0';
+                    setTimeout(() => canvas.style.display = 'none', 500);
+                    processGiftOpened(cardElement);
+                }
+            }
+
+            canvas.addEventListener('mousedown', (e) => { isDrawing = true; const pos = getMousePos(e); lastX = pos.x; lastY = pos.y; });
+            canvas.addEventListener('mousemove', scratch);
+            canvas.addEventListener('mouseup', () => isDrawing = false);
+            canvas.addEventListener('mouseleave', () => isDrawing = false);
+
+            canvas.addEventListener('touchstart', (e) => { isDrawing = true; const pos = getMousePos(e); lastX = pos.x; lastY = pos.y; }, {passive: false});
+            canvas.addEventListener('touchmove', scratch, {passive: false});
+            canvas.addEventListener('touchend', () => isDrawing = false);
+        }
+
+        // --- DODGING LOGIC FOR 4TH GIFT ---
         const gift4 = document.getElementById('gift-card-4');
         function handleDodge(e) {
             if(!gift4.classList.contains('opened') && gift4Dodges < 3) {
                 if(e.cancelable) e.preventDefault(); 
-                
-                const randomX = (Math.random() - 0.5) * 200; 
-                const randomY = (Math.random() - 0.5) * 200;
+                const randomX = (Math.random() - 0.5) * 200; const randomY = (Math.random() - 0.5) * 200;
                 gift4.style.transform = `translate(${randomX}px, ${randomY}px)`;
                 gift4Dodges++;
             } else if (gift4Dodges >= 3 && !gift4.classList.contains('opened')) {
                 gift4.style.transform = `translate(0px, -10px)`;
             }
         }
-        
         gift4.addEventListener('mouseenter', handleDodge);
         gift4.addEventListener('touchstart', handleDodge, {passive: false});
 
-        function openGift(card) {
+        // --- GIFT OPENING LOGIC ---
+        function openNormalGift(card) {
             if (card.id === 'gift-card-4' && gift4Dodges < 3) return;
             if (card.classList.contains('opened')) return; 
 
+            card.querySelector('.btn').style.display = 'none';
+            card.querySelector('.normal-content').style.display = 'block'; 
+            processGiftOpened(card);
+        }
+
+        function processGiftOpened(card) {
+            if (card.classList.contains('opened')) return;
             card.classList.add('opened'); 
             card.style.pointerEvents = 'none'; 
             card.style.transform = 'none'; 
-            
-            card.querySelector('.btn').style.display = 'none';
-            card.querySelector('.gift-content').style.display = 'block'; 
+
             playPopSound(); 
             confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 }, colors:['#D2042D', '#ffffff'] });
             openedGiftsCount++;
@@ -500,28 +600,11 @@
 
                     shootBigConfetti();
                     
-                    setTimeout(() => {
-                        // Triggers the red ribbon button to slide out halfway
-                        document.getElementById('ribbon-btn').classList.add('show-ribbon');
-                    }, 1000);
-
-                    setTimeout(() => { 
-                        document.getElementById('my-signature').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
-                    }, 500);
+                    setTimeout(() => { document.getElementById('ribbon-btn').classList.add('show-ribbon'); }, 1000);
+                    setTimeout(() => { document.getElementById('my-signature').scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 500);
                 }, 1000);
             }
         }
-
-        document.querySelectorAll('.gift-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                if(!this.classList.contains('opened') && (this.id !== 'gift-card-4' || gift4Dodges >= 3)) {
-                    const rect = this.getBoundingClientRect();
-                    const x = (rect.left + rect.width / 2) / window.innerWidth;
-                    const y = rect.top / window.innerHeight;
-                    confetti({ particleCount: 15, spread: 40, origin: { x: x, y: y }, colors: ['#D2042D', '#ffffff', '#ffd700'], disableForReducedMotion: true, ticks: 100 });
-                }
-            });
-        });
 
         function createRosePetals() {
             const container = document.createElement('div'); container.style.position = 'fixed'; container.style.top = '0'; container.style.left = '0';
@@ -536,9 +619,7 @@
             }
         }
 
-        function shootBigConfetti() {
-            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#D2042D', '#bfa4d8', '#ffffff', '#99001f', '#ffd700'], zIndex: 1000 });
-        }
+        function shootBigConfetti() { confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#D2042D', '#bfa4d8', '#ffffff', '#99001f', '#ffd700'], zIndex: 1000 }); }
 
         function openEatModal() {
             document.getElementById('eat-modal').style.display = 'flex';
@@ -548,26 +629,13 @@
         function spawnCrumbs(x, y) {
             const container = document.getElementById('big-cake-container');
             for(let i=0; i<6; i++) {
-                const crumb = document.createElement('div');
-                crumb.style.position = 'absolute';
-                crumb.style.width = (Math.random() * 8 + 4) + 'px';
-                crumb.style.height = crumb.style.width;
-                crumb.style.background = Math.random() > 0.5 ? '#ffb6c1' : '#8b4513';
-                crumb.style.borderRadius = '50%';
-                crumb.style.left = x + 'px';
-                crumb.style.top = y + 'px';
-                crumb.style.pointerEvents = 'none';
-                crumb.style.zIndex = 100;
+                const crumb = document.createElement('div'); crumb.style.position = 'absolute'; crumb.style.width = (Math.random() * 8 + 4) + 'px'; crumb.style.height = crumb.style.width;
+                crumb.style.background = Math.random() > 0.5 ? '#ffb6c1' : '#8b4513'; crumb.style.borderRadius = '50%';
+                crumb.style.left = x + 'px'; crumb.style.top = y + 'px'; crumb.style.pointerEvents = 'none'; crumb.style.zIndex = 100;
                 
-                const tx = (Math.random() - 0.5) * 120;
-                const ty = Math.random() * 150 + 50;
-                crumb.animate([
-                    { transform: `translate(0, 0)`, opacity: 1 },
-                    { transform: `translate(${tx}px, ${ty}px)`, opacity: 0 }
-                ], { duration: 800, easing: 'cubic-bezier(.25,.8,.25,1)' });
-
-                container.appendChild(crumb);
-                setTimeout(() => crumb.remove(), 800);
+                const tx = (Math.random() - 0.5) * 120; const ty = Math.random() * 150 + 50;
+                crumb.animate([{ transform: `translate(0, 0)`, opacity: 1 }, { transform: `translate(${tx}px, ${ty}px)`, opacity: 0 }], { duration: 800, easing: 'cubic-bezier(.25,.8,.25,1)' });
+                container.appendChild(crumb); setTimeout(() => crumb.remove(), 800);
             }
         }
 
@@ -576,40 +644,50 @@
             playEatCrunch();
 
             const cakeContainer = document.getElementById('big-cake-container');
-            
-            // Jiggle animation on cake when bitten
-            cakeContainer.classList.remove('cake-shake-anim');
-            void cakeContainer.offsetWidth; 
-            cakeContainer.classList.add('cake-shake-anim');
+            cakeContainer.classList.remove('cake-shake-anim'); void cakeContainer.offsetWidth; cakeContainer.classList.add('cake-shake-anim');
 
             const rect = event.currentTarget.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
+            const x = event.clientX - rect.left; const y = event.clientY - rect.top;
 
-            // Spawn the dark scaling circle to simulate pieces being removed
-            const bite = document.createElement('div');
-            bite.classList.add('bite-mark');
-            const size = Math.random() * 30 + 50; 
-            bite.style.width = size + 'px'; bite.style.height = size + 'px';
+            const bite = document.createElement('div'); bite.classList.add('bite-mark');
+            const size = Math.random() * 30 + 50; bite.style.width = size + 'px'; bite.style.height = size + 'px';
             bite.style.left = (x - size/2) + 'px'; bite.style.top = (y - size/2) + 'px';
 
-            event.currentTarget.appendChild(bite);
-            
-            // Drop some crumbs!
-            spawnCrumbs(x, y);
-
-            cakeBites++;
+            event.currentTarget.appendChild(bite); spawnCrumbs(x, y); cakeBites++;
 
             if (cakeBites === 6) {
                 setTimeout(() => {
                     playBurpSound();
-                    const title = document.getElementById('eat-title');
-                    title.innerText = "Burp! All gone! 😋";
-                    title.style.color = "#ffd700";
+                    const title = document.getElementById('eat-title'); title.innerText = "Burp! All gone! 😋"; title.style.color = "#ffd700";
                     document.getElementById('big-cake-container').style.display = 'none';
-                    setTimeout(() => { document.getElementById('eat-modal').style.display = 'none'; }, 3000);
+                    
+                    // Grand Finale: The Certificate!
+                    setTimeout(() => { 
+                        document.getElementById('eat-modal').style.display = 'none'; 
+                        showCertificate();
+                    }, 2500);
                 }, 500);
             }
+        }
+
+        function showCertificate() {
+            const cert = document.getElementById('cert-modal');
+            cert.style.display = 'flex';
+            // Slight delay for fade in effect
+            setTimeout(() => {
+                cert.style.opacity = '1';
+                shootBigConfetti();
+                playPopSound();
+            }, 100);
+        }
+
+        function closeCertificate() {
+            playPopSound();
+            const cert = document.getElementById('cert-modal');
+            cert.style.opacity = '0';
+            setTimeout(() => {
+                cert.style.display = 'none';
+            }, 800);
         }
     </script>
 </body>
