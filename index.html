@@ -95,7 +95,6 @@
         .gift-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(210, 4, 45, 0.4); border-radius: 15px; width: 220px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.4s ease; z-index: 20; position: relative; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .gift-card:hover, .gift-card:focus { background: rgba(210, 4, 45, 0.15); border-color: rgba(255,255,255,0.4); }
         
-        /* Specific hover just for the non-dodging ones */
         .gift-card:not(#gift-card-4):hover { transform: translateY(-10px); box-shadow: 0 10px 25px rgba(210, 4, 45, 0.4); }
 
         .gift-icon img { width: 70px; animation: bounce 3s infinite; }
@@ -107,19 +106,36 @@
         #secret-message { background: linear-gradient(135deg, rgba(210, 4, 45, 0.8), rgba(153, 0, 31, 0.8)); border: 2px solid gold; box-shadow: 0 0 40px rgba(255, 215, 0, 0.4); display: none; z-index: 20; position: relative; }
         #secret-message h2 { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: gold; margin-bottom: 10px;}
         
-        .signature-block { display: none; margin-top: 40px; margin-bottom: 20px; text-align: center; z-index: 20; position: relative; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+        .signature-block { display: none; margin-top: 40px; margin-bottom: 40px; text-align: center; z-index: 20; position: relative; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
         .sign-off-text { font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: #e0e0e0; display: block; letter-spacing: 1px; }
         .my-name { font-family: 'Dancing Script', cursive; font-size: 4rem; color: var(--cherry-red); text-shadow: 2px 2px 10px rgba(210, 4, 45, 0.7); display: inline-block; margin-top: 5px; }
 
         .petal { position: fixed; top: -10vh; background: linear-gradient(135deg, var(--cherry-red), #ff4d6d); border-radius: 50% 0 50% 50%; z-index: 1; pointer-events: none; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
 
+        /* NEW RIBBON STYLE */
         #ribbon-btn {
-            position: fixed; bottom: 30px; right: -250px; background: linear-gradient(45deg, #ffd700, #ff8c00);
-            color: #000; font-family: 'Poppins', sans-serif; font-weight: bold; font-size: 1.1rem;
-            padding: 12px 20px; border: none; border-radius: 30px 0 0 30px; cursor: pointer;
-            box-shadow: -5px 5px 15px rgba(0,0,0,0.5); z-index: 1000; transition: right 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: fixed; 
+            bottom: 40px; 
+            right: -250px; /* Initially hidden entirely */
+            background: linear-gradient(135deg, var(--cherry-red), #ff4d6d);
+            color: #fff; 
+            font-family: 'Poppins', sans-serif; 
+            font-weight: bold; 
+            font-size: 1.1rem;
+            padding: 12px 20px 12px 30px; 
+            border: 2px solid #fff;
+            border-right: none;
+            border-radius: 30px 0 0 30px; 
+            cursor: pointer;
+            box-shadow: -5px 5px 15px rgba(0,0,0,0.5); 
+            z-index: 1000; 
+            transition: right 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 180px; /* Fixed width */
         }
-        #ribbon-btn:hover { background: linear-gradient(45deg, #ff8c00, #ffd700); padding-right: 30px; }
+        /* State where it's half inside, half outside */
+        #ribbon-btn.show-ribbon { right: -85px; }
+        /* Pulls out fully on hover */
+        #ribbon-btn.show-ribbon:hover { right: 0; box-shadow: -5px 5px 25px rgba(210, 4, 45, 0.8); }
         
         #eat-modal {
             position: fixed; inset: 0; background: var(--modal-bg); z-index: 2000; display: none;
@@ -129,11 +145,18 @@
         
         #big-cake-container { position: relative; cursor: pointer; transform: scale(1.5); transition: transform 0.1s; }
         #big-cake-container:active { transform: scale(1.4); }
-        .bite-mark { position: absolute; background: var(--modal-bg); border-radius: 50%; pointer-events: none; box-shadow: inset 0 0 5px rgba(0,0,0,0.8); }
-
-        /* Voice note styles */
-        #voice-section { display: none; margin-top: 20px; margin-bottom: 40px; text-align: center; animation: fadeIn 2s ease; position: relative; z-index: 20; }
-        #voice-msg { display: none; color: #ffb6c1; font-size: 1.1rem; font-style: italic; margin-top: 15px; font-weight: bold; }
+        
+        /* BITE MARK ANIMATION */
+        .bite-mark { 
+            position: absolute; 
+            background: var(--modal-bg); 
+            border-radius: 50%; 
+            pointer-events: none; 
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.9); 
+            transform: scale(0);
+            animation: bitePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .cake-shake-anim { animation: shakeCake 0.3s ease; }
 
         @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.1); } }
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
@@ -143,6 +166,8 @@
         @keyframes flicker { 0% { transform: scale(1) rotate(-2deg); opacity: 0.9; } 100% { transform: scale(1.1) rotate(2deg); opacity: 1; } }
         @keyframes fallPetal { 0% { transform: translateY(-10vh) rotate3d(1, 1, 1, 0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate3d(1, 1, 1, 360deg); opacity: 0.4; } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } }
+        @keyframes bitePop { to { transform: scale(1); } }
+        @keyframes shakeCake { 0%, 100% { transform: scale(1.5) rotate(0deg); } 25% { transform: scale(1.4) rotate(-3deg); } 50% { transform: scale(1.4) rotate(3deg); } 75% { transform: scale(1.4) rotate(-3deg); } }
     </style>
 </head>
 <body>
@@ -219,7 +244,6 @@
                 <button class="btn" tabindex="-1">Open Gift 3</button>
                 <div class="gift-content">A promise to always support you as a good friend whenever you need it.</div>
             </div>
-            <!-- Gift 4: The Dodging Gift -->
             <div class="gift-card" id="gift-card-4" tabindex="0" onclick="openGift(this)">
                 <div class="gift-icon"><img src="https://img.icons8.com/fluency/96/gift.png" alt="Gift Box"></div>
                 <button class="btn" tabindex="-1">Open Gift 4</button>
@@ -237,16 +261,10 @@
             <div class="my-name">Ath</div>
         </div>
 
-        <!-- NEW VOICE NOTE SECTION -->
-        <div id="voice-section">
-            <button class="btn" id="voice-btn" onclick="playVoiceNote()" style="background: #2d1e3e; border: 1px solid #bfa4d8;">Play Ath's Voice Message 🎙️</button>
-            <p id="voice-msg"></p>
-        </div>
-
     </div>
 
     <!-- RIBBON & EATING MODAL HTML -->
-    <button id="ribbon-btn" onclick="openEatModal()">Want to eat cake? 🍰</button>
+    <button id="ribbon-btn" onclick="openEatModal()">Eat Cake 🍰</button>
 
     <div id="eat-modal">
         <h2 id="eat-title">Click to take a bite!</h2>
@@ -326,26 +344,10 @@
             } catch (e) {}
         }
 
-        function playFunnyVoiceSound() {
-            try {
-                const ctx = getAudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(400, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.2);
-                osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.4);
-                gain.gain.setValueAtTime(0.5, ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5);
-                osc.start(); osc.stop(ctx.currentTime + 0.5);
-            } catch(e) {}
-        }
-
         let openedGiftsCount = 0;
         let blownOutCandles = 0;
         let cakeBites = 0; 
-        let gift4Dodges = 0; // Tracks dodges for the 4th gift
+        let gift4Dodges = 0; 
 
         const memories = ["https://via.placeholder.com/250/99001f/FFFFFF?text=Memory+1", "https://via.placeholder.com/250/2d1e3e/FFFFFF?text=Memory+2", "https://via.placeholder.com/250/D2042D/FFFFFF?text=Memory+3"]; 
         let currentMemory = 0;
@@ -457,37 +459,30 @@
             }
         }
 
-        // --- DODGE LOGIC FOR 4TH GIFT ---
         const gift4 = document.getElementById('gift-card-4');
         function handleDodge(e) {
             if(!gift4.classList.contains('opened') && gift4Dodges < 3) {
-                // Prevent scrolling/clicking when jumping away
                 if(e.cancelable) e.preventDefault(); 
                 
-                // Random position jump
                 const randomX = (Math.random() - 0.5) * 200; 
                 const randomY = (Math.random() - 0.5) * 200;
                 gift4.style.transform = `translate(${randomX}px, ${randomY}px)`;
                 gift4Dodges++;
             } else if (gift4Dodges >= 3 && !gift4.classList.contains('opened')) {
-                // Bring it back to center so she can finally click it
                 gift4.style.transform = `translate(0px, -10px)`;
             }
         }
         
-        // Listen for mouse hover or touch on mobile
         gift4.addEventListener('mouseenter', handleDodge);
         gift4.addEventListener('touchstart', handleDodge, {passive: false});
-        // --------------------------------
 
         function openGift(card) {
-            // Check if it's the 4th gift and it hasn't dodged 3 times yet
             if (card.id === 'gift-card-4' && gift4Dodges < 3) return;
-
             if (card.classList.contains('opened')) return; 
+
             card.classList.add('opened'); 
             card.style.pointerEvents = 'none'; 
-            card.style.transform = 'none'; // Lock position
+            card.style.transform = 'none'; 
             
             card.querySelector('.btn').style.display = 'none';
             card.querySelector('.gift-content').style.display = 'block'; 
@@ -503,16 +498,15 @@
                     document.getElementById('my-signature').style.display = 'block';
                     document.getElementById('my-signature').style.animation = 'fadeIn 3s ease-in-out';
 
-                    document.getElementById('voice-section').style.display = 'block';
-
                     shootBigConfetti();
                     
                     setTimeout(() => {
-                        document.getElementById('ribbon-btn').style.right = '0';
+                        // Triggers the red ribbon button to slide out halfway
+                        document.getElementById('ribbon-btn').classList.add('show-ribbon');
                     }, 1000);
 
                     setTimeout(() => { 
-                        document.getElementById('voice-section').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+                        document.getElementById('my-signature').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
                     }, 500);
                 }, 1000);
             }
@@ -520,7 +514,6 @@
 
         document.querySelectorAll('.gift-card').forEach(card => {
             card.addEventListener('mouseenter', function() {
-                // Don't pop confetti while the 4th box is dodging
                 if(!this.classList.contains('opened') && (this.id !== 'gift-card-4' || gift4Dodges >= 3)) {
                     const rect = this.getBoundingClientRect();
                     const x = (rect.left + rect.width / 2) / window.innerWidth;
@@ -529,15 +522,6 @@
                 }
             });
         });
-
-        // --- FUNNY VOICE NOTE BUTTON ---
-        function playVoiceNote() {
-            playFunnyVoiceSound();
-            document.getElementById('voice-btn').style.display = 'none';
-            const msg = document.getElementById('voice-msg');
-            msg.style.display = 'block';
-            msg.innerHTML = "Oops, wrong audio file! 🐐<br>(But honestly, I sound about the same in the morning.)";
-        }
 
         function createRosePetals() {
             const container = document.createElement('div'); container.style.position = 'fixed'; container.style.top = '0'; container.style.left = '0';
@@ -561,21 +545,59 @@
             document.getElementById('ribbon-btn').style.display = 'none';
         }
 
+        function spawnCrumbs(x, y) {
+            const container = document.getElementById('big-cake-container');
+            for(let i=0; i<6; i++) {
+                const crumb = document.createElement('div');
+                crumb.style.position = 'absolute';
+                crumb.style.width = (Math.random() * 8 + 4) + 'px';
+                crumb.style.height = crumb.style.width;
+                crumb.style.background = Math.random() > 0.5 ? '#ffb6c1' : '#8b4513';
+                crumb.style.borderRadius = '50%';
+                crumb.style.left = x + 'px';
+                crumb.style.top = y + 'px';
+                crumb.style.pointerEvents = 'none';
+                crumb.style.zIndex = 100;
+                
+                const tx = (Math.random() - 0.5) * 120;
+                const ty = Math.random() * 150 + 50;
+                crumb.animate([
+                    { transform: `translate(0, 0)`, opacity: 1 },
+                    { transform: `translate(${tx}px, ${ty}px)`, opacity: 0 }
+                ], { duration: 800, easing: 'cubic-bezier(.25,.8,.25,1)' });
+
+                container.appendChild(crumb);
+                setTimeout(() => crumb.remove(), 800);
+            }
+        }
+
         function takeBite(event) {
             if(cakeBites >= 6) return;
             playEatCrunch();
+
+            const cakeContainer = document.getElementById('big-cake-container');
+            
+            // Jiggle animation on cake when bitten
+            cakeContainer.classList.remove('cake-shake-anim');
+            void cakeContainer.offsetWidth; 
+            cakeContainer.classList.add('cake-shake-anim');
 
             const rect = event.currentTarget.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
 
+            // Spawn the dark scaling circle to simulate pieces being removed
             const bite = document.createElement('div');
             bite.classList.add('bite-mark');
-            const size = Math.random() * 40 + 60; 
+            const size = Math.random() * 30 + 50; 
             bite.style.width = size + 'px'; bite.style.height = size + 'px';
             bite.style.left = (x - size/2) + 'px'; bite.style.top = (y - size/2) + 'px';
 
             event.currentTarget.appendChild(bite);
+            
+            // Drop some crumbs!
+            spawnCrumbs(x, y);
+
             cakeBites++;
 
             if (cakeBites === 6) {
@@ -586,7 +608,7 @@
                     title.style.color = "#ffd700";
                     document.getElementById('big-cake-container').style.display = 'none';
                     setTimeout(() => { document.getElementById('eat-modal').style.display = 'none'; }, 3000);
-                }, 300);
+                }, 500);
             }
         }
     </script>
