@@ -8,7 +8,6 @@
     <link rel="preload" href="tata.jpg" as="image">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- Library for downloading the certificate as an image -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
@@ -77,7 +76,20 @@
 
         .message-box { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 25px; max-width: 600px; text-align: center; margin: 15px 0; line-height: 1.6; font-size: 1.1rem; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); display: none; min-height: 80px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
 
-        #cake-section { display: none; margin: 60px 0 40px 0; text-align: center; animation: fadeIn 2s ease-in; }
+        #cake-section { display: none; margin: 60px 0 40px 0; text-align: center; animation: fadeIn 2s ease-in; width: 100%;}
+        
+        /* 🔥 SECRET WISH BOX STYLES 🔥 */
+        #secret-wish {
+            padding: 15px 20px; border-radius: 30px; border: 2px solid var(--cherry-red);
+            background: rgba(255, 255, 255, 0.1); color: white; text-align: center;
+            font-family: 'Poppins', sans-serif; font-size: 1.1rem; width: 90%; max-width: 400px;
+            display: block; margin: 0 auto 30px auto; outline: none; transition: all 1.5s ease;
+            box-shadow: 0 0 15px rgba(210, 4, 45, 0.3); backdrop-filter: blur(5px);
+        }
+        #secret-wish:focus {
+            background: rgba(255, 255, 255, 0.2); box-shadow: 0 0 25px rgba(210, 4, 45, 0.6);
+        }
+
         .cake-wrapper { position: relative; width: 220px; height: 180px; margin: 0 auto 30px auto; z-index: 10;}
         .plate { position: absolute; bottom: -10px; left: -15px; width: 250px; height: 40px; background: #e0e0e0; border-radius: 50%; box-shadow: 0 10px 15px rgba(0,0,0,0.6); border-bottom: 5px solid #ccc; z-index: 1; }
         .tier-1 { position: absolute; bottom: 10px; left: 10px; width: 200px; height: 80px; background: #ffb6c1; border-radius: 10px; box-shadow: inset -15px 0 rgba(0,0,0,0.1); z-index: 2; border-bottom: 6px solid #8b4513; }
@@ -137,32 +149,16 @@
         #big-cake-container { position: relative; cursor: pointer; transform: scale(1.5); transition: transform 0.4s ease, opacity 0.5s ease; }
         #big-cake-container:active { transform: scale(1.4); }
         
-        /* 🔥 FIXED CAKE EATING LOGIC 🔥 */
-        /* Added z-index: 100 so the "bite marks" securely cover and hide the cake layers underneath */
-        .bite-mark { 
-            position: absolute; 
-            background: var(--modal-bg); 
-            border-radius: 50%; 
-            pointer-events: none; 
-            z-index: 100; 
-            transform: scale(0); 
-            animation: bitePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
-        }
+        .bite-mark { position: absolute; background: var(--modal-bg); border-radius: 50%; pointer-events: none; z-index: 100; transform: scale(0); animation: bitePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         .cake-shake-anim { animation: shakeCake 0.3s ease; }
 
-        /* --- SCROLLABLE CERTIFICATE MODAL STYLES --- */
         #cert-modal {
             position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 3000; display: none;
             justify-content: center; align-items: flex-start; padding: 40px 20px; 
-            overflow-y: auto; -webkit-overflow-scrolling: touch;
-            opacity: 0; transition: opacity 1s ease;
+            overflow-y: auto; -webkit-overflow-scrolling: touch; opacity: 0; transition: opacity 1s ease;
         }
         
-        .cert-modal-content {
-            display: flex; flex-direction: column; align-items: center; 
-            margin: auto; 
-            width: 100%; max-width: 600px;
-        }
+        .cert-modal-content { display: flex; flex-direction: column; align-items: center; margin: auto; width: 100%; max-width: 600px; }
 
         .cert-box {
             background: #fff8e7; border: 12px solid #d4af37; padding: 40px 30px; border-radius: 10px;
@@ -179,9 +175,9 @@
         
         .wax-seal {
             background: #99001f; color: #d4af37; width: 90px; height: 90px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center; font-weight: bold;
-            margin: 0 auto; box-shadow: inset 0 0 15px #550000, 0 5px 15px rgba(0,0,0,0.5);
-            font-family: 'Dancing Script', cursive; font-size: 1.1rem; line-height: 1.2; border: 3px solid #d4af37; z-index: 10; position: relative;
+            display: flex; justify-content: center; align-items: center; font-weight: bold; margin: 0 auto;
+            box-shadow: inset 0 0 15px #550000, 0 5px 15px rgba(0,0,0,0.5); font-family: 'Dancing Script', cursive;
+            font-size: 1.1rem; line-height: 1.2; border: 3px solid #d4af37; z-index: 10; position: relative;
         }
 
         @media (max-width: 600px) {
@@ -249,6 +245,9 @@
         <div class="message-box" id="msg2" data-text="I have kept some special virtual gifts for you below. But first... make a wish and tap the candles to blow them out!"></div>
 
         <div id="cake-section">
+            <!-- 🔥 SECRET WISH INPUT HERE 🔥 -->
+            <input type="password" id="secret-wish" placeholder="Type your secret wish here..." autocomplete="off">
+
             <div class="cake-wrapper">
                 <div class="plate"></div>
                 <div class="tier-1"><div class="frosting-1"></div></div>
@@ -498,6 +497,14 @@
 
             if (blownOutCandles === 3) {
                 document.getElementById('cake-instruction').innerText = "Yay! Happy Birthday! 🥳";
+                
+                // 🔥 FADES OUT THE SECRET WISH 🔥
+                const secretWish = document.getElementById('secret-wish');
+                if(secretWish) {
+                    secretWish.style.opacity = '0';
+                    setTimeout(() => secretWish.style.display = 'none', 1500);
+                }
+
                 shootBigConfetti();
                 setTimeout(() => {
                     document.getElementById('gifts-container').style.display = 'flex';
@@ -513,20 +520,13 @@
             const ctx = canvas.getContext('2d');
             let isDrawing = false; let lastX = 0, lastY = 0; let isScratched = false;
 
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
+            canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
 
-            // 🔥 CHANGED TO RED FOIL 🔥
             const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            gradient.addColorStop(0, '#D2042D'); // Cherry Red
-            gradient.addColorStop(1, '#99001f'); // Darker Red
-            ctx.fillStyle = gradient; 
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#D2042D'); gradient.addColorStop(1, '#99001f');
+            ctx.fillStyle = gradient; ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            ctx.font = 'bold 16px Poppins';
-            ctx.fillStyle = '#ffffff'; // White text
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
+            ctx.font = 'bold 16px Poppins'; ctx.fillStyle = '#ffffff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
             ctx.fillText('Scratch Me! 🪙', canvas.width/2, canvas.height/2);
 
             function getMousePos(e) {
@@ -540,45 +540,26 @@
                 if (!isDrawing || isScratched) return;
                 if(e.cancelable) e.preventDefault(); 
                 const pos = getMousePos(e);
-                
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.beginPath();
-                ctx.moveTo(lastX, lastY);
-                ctx.lineTo(pos.x, pos.y);
-                ctx.lineWidth = 30;
-                ctx.lineCap = 'round';
-                ctx.stroke();
-                
-                lastX = pos.x; lastY = pos.y;
-                checkScratched();
+                ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(pos.x, pos.y);
+                ctx.lineWidth = 30; ctx.lineCap = 'round'; ctx.stroke(); lastX = pos.x; lastY = pos.y; checkScratched();
             }
 
             let checkCounter = 0;
             function checkScratched() {
-                checkCounter++;
-                if(checkCounter % 5 !== 0) return; 
-                
+                checkCounter++; if(checkCounter % 5 !== 0) return; 
                 const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
                 let cleared = 0;
                 for(let i = 3; i < pixels.length; i += 40) { if(pixels[i] === 0) cleared++; }
-                
                 if(cleared > (pixels.length / 40) * 0.4) {
-                    isScratched = true;
-                    canvas.style.transition = 'opacity 0.5s ease';
-                    canvas.style.opacity = '0';
-                    setTimeout(() => canvas.style.display = 'none', 500);
-                    processGiftOpened(cardElement);
+                    isScratched = true; canvas.style.transition = 'opacity 0.5s ease'; canvas.style.opacity = '0';
+                    setTimeout(() => canvas.style.display = 'none', 500); processGiftOpened(cardElement);
                 }
             }
 
             canvas.addEventListener('mousedown', (e) => { isDrawing = true; const pos = getMousePos(e); lastX = pos.x; lastY = pos.y; });
-            canvas.addEventListener('mousemove', scratch);
-            canvas.addEventListener('mouseup', () => isDrawing = false);
-            canvas.addEventListener('mouseleave', () => isDrawing = false);
-
+            canvas.addEventListener('mousemove', scratch); canvas.addEventListener('mouseup', () => isDrawing = false); canvas.addEventListener('mouseleave', () => isDrawing = false);
             canvas.addEventListener('touchstart', (e) => { isDrawing = true; const pos = getMousePos(e); lastX = pos.x; lastY = pos.y; }, {passive: false});
-            canvas.addEventListener('touchmove', scratch, {passive: false});
-            canvas.addEventListener('touchend', () => isDrawing = false);
+            canvas.addEventListener('touchmove', scratch, {passive: false}); canvas.addEventListener('touchend', () => isDrawing = false);
         }
 
         const gift4 = document.getElementById('gift-card-4');
@@ -586,45 +567,31 @@
             if(!gift4.classList.contains('opened') && gift4Dodges < 3) {
                 if(e.cancelable) e.preventDefault(); 
                 const randomX = (Math.random() - 0.5) * 200; const randomY = (Math.random() - 0.5) * 200;
-                gift4.style.transform = `translate(${randomX}px, ${randomY}px)`;
-                gift4Dodges++;
+                gift4.style.transform = `translate(${randomX}px, ${randomY}px)`; gift4Dodges++;
             } else if (gift4Dodges >= 3 && !gift4.classList.contains('opened')) {
                 gift4.style.transform = `translate(0px, -10px)`;
             }
         }
-        gift4.addEventListener('mouseenter', handleDodge);
-        gift4.addEventListener('touchstart', handleDodge, {passive: false});
+        gift4.addEventListener('mouseenter', handleDodge); gift4.addEventListener('touchstart', handleDodge, {passive: false});
 
         function openNormalGift(card) {
             if (card.id === 'gift-card-4' && gift4Dodges < 3) return;
             if (card.classList.contains('opened')) return; 
-
-            card.querySelector('.btn').style.display = 'none';
-            card.querySelector('.normal-content').style.display = 'block'; 
+            card.querySelector('.btn').style.display = 'none'; card.querySelector('.normal-content').style.display = 'block'; 
             processGiftOpened(card);
         }
 
         function processGiftOpened(card) {
             if (card.classList.contains('opened')) return;
-            card.classList.add('opened'); 
-            card.style.pointerEvents = 'none'; 
-            card.style.transform = 'none'; 
-
-            playPopSound(); 
-            confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 }, colors:['#D2042D', '#ffffff'] });
+            card.classList.add('opened'); card.style.pointerEvents = 'none'; card.style.transform = 'none'; 
+            playPopSound(); confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 }, colors:['#D2042D', '#ffffff'] });
             openedGiftsCount++;
 
             if (openedGiftsCount === 4) {
                 setTimeout(() => {
-                    document.getElementById('secret-message').style.display = 'block'; 
-                    document.getElementById('secret-message').style.animation = 'fadeIn 2s ease-in-out';
-                    
-                    document.getElementById('my-signature').style.display = 'block';
-                    document.getElementById('my-signature').style.animation = 'fadeIn 3s ease-in-out';
-
-                    shootBigConfetti();
-                    
-                    setTimeout(() => { document.getElementById('ribbon-btn').classList.add('show-ribbon'); }, 1000);
+                    document.getElementById('secret-message').style.display = 'block'; document.getElementById('secret-message').style.animation = 'fadeIn 2s ease-in-out';
+                    document.getElementById('my-signature').style.display = 'block'; document.getElementById('my-signature').style.animation = 'fadeIn 3s ease-in-out';
+                    shootBigConfetti(); setTimeout(() => { document.getElementById('ribbon-btn').classList.add('show-ribbon'); }, 1000);
                     setTimeout(() => { document.getElementById('my-signature').scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 500);
                 }, 1000);
             }
@@ -638,17 +605,13 @@
                 const size = Math.random() * 10 + 10; petal.style.width = size + 'px'; petal.style.height = size + 'px';
                 petal.style.left = Math.random() * 100 + 'vw';
                 const duration = Math.random() * 4 + 6; const delay = Math.random() * 5; 
-                petal.style.animation = `fallPetal ${duration}s linear ${delay}s infinite`;
-                container.appendChild(petal);
+                petal.style.animation = `fallPetal ${duration}s linear ${delay}s infinite`; container.appendChild(petal);
             }
         }
 
         function shootBigConfetti() { confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#D2042D', '#bfa4d8', '#ffffff', '#99001f', '#ffd700'], zIndex: 1000 }); }
 
-        function openEatModal() {
-            document.getElementById('eat-modal').style.display = 'flex';
-            document.getElementById('ribbon-btn').style.display = 'none';
-        }
+        function openEatModal() { document.getElementById('eat-modal').style.display = 'flex'; document.getElementById('ribbon-btn').style.display = 'none'; }
 
         function spawnCrumbs(x, y) {
             const container = document.getElementById('big-cake-container');
@@ -656,7 +619,6 @@
                 const crumb = document.createElement('div'); crumb.style.position = 'absolute'; crumb.style.width = (Math.random() * 8 + 4) + 'px'; crumb.style.height = crumb.style.width;
                 crumb.style.background = Math.random() > 0.5 ? '#ffb6c1' : '#8b4513'; crumb.style.borderRadius = '50%';
                 crumb.style.left = x + 'px'; crumb.style.top = y + 'px'; crumb.style.pointerEvents = 'none'; crumb.style.zIndex = 101;
-                
                 const tx = (Math.random() - 0.5) * 120; const ty = Math.random() * 150 + 50;
                 crumb.animate([{ transform: `translate(0, 0)`, opacity: 1 }, { transform: `translate(${tx}px, ${ty}px)`, opacity: 0 }], { duration: 800, easing: 'cubic-bezier(.25,.8,.25,1)' });
                 container.appendChild(crumb); setTimeout(() => crumb.remove(), 800);
@@ -664,79 +626,34 @@
         }
 
         function takeBite(event) {
-            if(cakeBites >= 6) return;
-            playEatCrunch();
-
+            if(cakeBites >= 6) return; playEatCrunch();
             const cakeContainer = document.getElementById('big-cake-container');
             cakeContainer.classList.remove('cake-shake-anim'); void cakeContainer.offsetWidth; cakeContainer.classList.add('cake-shake-anim');
+            const rect = event.currentTarget.getBoundingClientRect(); const x = event.clientX - rect.left; const y = event.clientY - rect.top;
 
-            const rect = event.currentTarget.getBoundingClientRect();
-            const x = event.clientX - rect.left; const y = event.clientY - rect.top;
-
-            const bite = document.createElement('div'); 
-            bite.classList.add('bite-mark');
-            const size = Math.random() * 50 + 60; // Big bites
-            bite.style.width = size + 'px'; 
-            bite.style.height = size + 'px';
-            bite.style.left = (x - size/2) + 'px'; 
-            bite.style.top = (y - size/2) + 'px';
-
-            event.currentTarget.appendChild(bite); 
-            spawnCrumbs(x, y); 
-            cakeBites++;
+            const bite = document.createElement('div'); bite.classList.add('bite-mark');
+            const size = Math.random() * 50 + 60; bite.style.width = size + 'px'; bite.style.height = size + 'px';
+            bite.style.left = (x - size/2) + 'px'; bite.style.top = (y - size/2) + 'px';
+            event.currentTarget.appendChild(bite); spawnCrumbs(x, y); cakeBites++;
 
             if (cakeBites === 6) {
                 setTimeout(() => {
-                    playBurpSound();
-                    const title = document.getElementById('eat-title'); title.innerText = "Burp! All gone! 😋"; title.style.color = "#ffd700";
-                    
-                    cakeContainer.style.transform = 'scale(0)';
-                    cakeContainer.style.opacity = '0';
-                    setTimeout(() => cakeContainer.style.display = 'none', 500);
-                    
-                    setTimeout(() => { 
-                        document.getElementById('eat-modal').style.display = 'none'; 
-                        showCertificate();
-                    }, 2500);
+                    playBurpSound(); const title = document.getElementById('eat-title'); title.innerText = "Burp! All gone! 😋"; title.style.color = "#ffd700";
+                    cakeContainer.style.transform = 'scale(0)'; cakeContainer.style.opacity = '0'; setTimeout(() => cakeContainer.style.display = 'none', 500);
+                    setTimeout(() => { document.getElementById('eat-modal').style.display = 'none'; showCertificate(); }, 2500);
                 }, 500);
             }
         }
 
-        function showCertificate() {
-            const cert = document.getElementById('cert-modal');
-            cert.style.display = 'flex';
-            setTimeout(() => {
-                cert.style.opacity = '1';
-                shootBigConfetti();
-                playPopSound();
-            }, 100);
-        }
-
-        function closeCertificate() {
-            playPopSound();
-            const cert = document.getElementById('cert-modal');
-            cert.style.opacity = '0';
-            setTimeout(() => {
-                cert.style.display = 'none';
-            }, 800);
-        }
+        function showCertificate() { const cert = document.getElementById('cert-modal'); cert.style.display = 'flex'; setTimeout(() => { cert.style.opacity = '1'; shootBigConfetti(); playPopSound(); }, 100); }
+        function closeCertificate() { playPopSound(); const cert = document.getElementById('cert-modal'); cert.style.opacity = '0'; setTimeout(() => { cert.style.display = 'none'; }, 800); }
 
         function downloadCertificate() {
-            playPopSound();
-            const certBox = document.getElementById('certificate-content');
-            
-            html2canvas(certBox, {
-                scale: 2, 
-                backgroundColor: "#fff8e7", 
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'Palak_Certificate_Of_Awesomeness.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            }).catch(err => {
-                console.error("Error generating certificate image", err);
-                alert("Oops! Something went wrong while saving.");
-            });
+            playPopSound(); const certBox = document.getElementById('certificate-content');
+            html2canvas(certBox, { scale: 2, backgroundColor: "#fff8e7" }).then(canvas => {
+                const link = document.createElement('a'); link.download = 'Palak_Certificate.png';
+                link.href = canvas.toDataURL('image/png'); link.click();
+            }).catch(err => { alert("Oops! Something went wrong while saving."); });
         }
     </script>
 </body>
