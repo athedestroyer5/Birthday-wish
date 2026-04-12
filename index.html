@@ -83,7 +83,7 @@
             padding: 15px 20px; border-radius: 30px; border: 2px solid var(--cherry-red);
             background: rgba(255, 255, 255, 0.1); color: white; text-align: center;
             font-family: 'Poppins', sans-serif; font-size: 1.1rem; width: 90%; max-width: 400px;
-            display: block; margin: 0 auto 30px auto; outline: none; transition: all 1.5s ease;
+            display: block; margin: 0 auto; outline: none; transition: all 1.5s ease;
             box-shadow: 0 0 15px rgba(210, 4, 45, 0.3); backdrop-filter: blur(5px);
         }
         #secret-wish:focus {
@@ -200,6 +200,50 @@
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } }
         @keyframes bitePop { to { transform: scale(1); } }
         @keyframes shakeCake { 0%, 100% { transform: scale(1.5) rotate(0deg); } 25% { transform: scale(1.4) rotate(-3deg); } 50% { transform: scale(1.4) rotate(3deg); } 75% { transform: scale(1.4) rotate(-3deg); } }
+
+        /* 🔥 MAGIC WISH ANIMATIONS 🔥 */
+        #wish-gift-box {
+            font-size: 3.5rem;
+            position: absolute;
+            display: none;
+            z-index: 50;
+            filter: drop-shadow(0 0 15px gold);
+        }
+
+        @keyframes popInGift {
+            0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+            70% { transform: scale(1.3) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .fly-away-anim {
+            animation: boxFlyAway 1.5s cubic-bezier(0.5, 0, 0.2, 1) forwards !important;
+        }
+
+        @keyframes boxFlyAway {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+            100% { transform: translate(100vw, -100vh) scale(0) rotate(360deg); opacity: 0; }
+        }
+
+        .star-streak {
+            position: fixed;
+            width: 250px;
+            height: 6px;
+            background: linear-gradient(90deg, rgba(255,255,255,0), #ffd700, #ffffff);
+            border-radius: 10px;
+            filter: drop-shadow(0 0 20px gold);
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .star-streak::after {
+            content: '⭐';
+            position: absolute;
+            right: -20px;
+            top: -25px;
+            font-size: 2.5rem;
+            filter: drop-shadow(0 0 15px white);
+        }
     </style>
 </head>
 <body>
@@ -246,7 +290,10 @@
 
         <div id="cake-section">
             <!-- 🔥 SECRET WISH INPUT HERE 🔥 -->
-            <input type="password" id="secret-wish" placeholder="Type your secret wish here..." autocomplete="off">
+            <div id="wish-container" style="position: relative; display: flex; justify-content: center; align-items: center; min-height: 60px; margin-bottom: 30px;">
+                <input type="password" id="secret-wish" placeholder="Type your secret wish here..." autocomplete="off" style="margin-bottom: 0;">
+                <div id="wish-gift-box">🎁</div>
+            </div>
 
             <div class="cake-wrapper">
                 <div class="plate"></div>
@@ -497,21 +544,75 @@
 
             if (blownOutCandles === 3) {
                 document.getElementById('cake-instruction').innerText = "Yay! Happy Birthday! 🥳";
-                
-                // 🔥 FADES OUT THE SECRET WISH 🔥
+
                 const secretWish = document.getElementById('secret-wish');
-                if(secretWish) {
+                const giftBox = document.getElementById('wish-gift-box');
+
+                if(secretWish && giftBox) {
+                    // 1. Shrink and hide the input box quickly
+                    secretWish.style.transitionDuration = '0.5s';
+                    secretWish.style.transform = 'scale(0)';
                     secretWish.style.opacity = '0';
-                    setTimeout(() => secretWish.style.display = 'none', 1500);
+
+                    setTimeout(() => {
+                        secretWish.style.display = 'none';
+
+                        // 2. Pop up the wrapped wish as a glowing gift box
+                        giftBox.style.display = 'block';
+                        giftBox.style.animation = 'popInGift 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+                        playPopSound();
+
+                        setTimeout(() => {
+                            // 3. Create the shooting star
+                            const rect = giftBox.getBoundingClientRect();
+                            const star = document.createElement('div');
+                            star.className = 'star-streak';
+
+                            // Align star trajectory with the gift box
+                            star.style.left = (rect.left - window.innerWidth) + 'px';
+                            star.style.top = (rect.top + window.innerHeight) + 'px';
+                            document.body.appendChild(star);
+
+                            // Animate shooting star diagonally
+                            const angle = -45;
+                            star.animate([
+                                { transform: `translate(0, 0) rotate(${angle}deg)`, opacity: 0 },
+                                { opacity: 1, offset: 0.1 },
+                                { transform: `translate(${window.innerWidth * 2}px, ${-window.innerHeight * 2}px) rotate(${angle}deg)`, opacity: 1 }
+                            ], { duration: 1500, easing: 'ease-in' });
+
+                            // Make the gift box fly away with it
+                            giftBox.classList.add('fly-away-anim');
+
+                            setTimeout(() => {
+                                star.remove();
+                                giftBox.style.display = 'none';
+
+                                // Print magical confirmation text
+                                const emptyMsg = document.createElement('p');
+                                emptyMsg.innerText = "✨ Your wish is on its way to the stars! ✨";
+                                emptyMsg.style.color = "#ffd700";
+                                emptyMsg.style.fontSize = "1.3rem";
+                                emptyMsg.style.fontFamily = "'Dancing Script', cursive";
+                                emptyMsg.style.textShadow = "0 0 15px rgba(255, 215, 0, 0.9)";
+                                emptyMsg.style.animation = "fadeIn 1.5s ease-in-out";
+                                document.getElementById('wish-container').appendChild(emptyMsg);
+
+                            }, 1200); // Wait for flight to finish
+
+                        }, 1200); // Wait for gift box to shine a bit
+
+                    }, 500); // Wait for input to shrink
                 }
 
-                shootBigConfetti();
+                // Delay the confetti and gifts until the star animation finishes
                 setTimeout(() => {
+                    shootBigConfetti();
                     document.getElementById('gifts-container').style.display = 'flex';
                     initScratchCard('scratch-1', document.getElementById('gift-card-1'));
                     initScratchCard('scratch-3', document.getElementById('gift-card-3'));
                     setTimeout(() => { document.getElementById('gifts-container').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 500);
-                }, 1000);
+                }, 3500);
             }
         }
 
