@@ -50,7 +50,8 @@
         .hint-container { margin-bottom: 15px; font-size: 0.95rem; color: #ccc; }
         .hint-btn { background: rgba(255,255,255,0.1); border: 1px solid white; color: #fff; font-size: 1rem; cursor: pointer; padding: 2px 8px; border-radius: 50%; margin-left: 5px; transition: all 0.3s; }
         .hint-btn:hover { background: white; color: black; box-shadow: 0 0 10px white; }
-        #pass-hint { display: none; color: #ffb6c1; font-size: 1rem; margin-top: 10px; font-style: italic; animation: fadeIn 0.5s ease-in; font-weight: bold; text-shadow: 0 0 5px rgba(255,182,193,0.5); }
+        
+        .hint-text-reveal { color: #ffb6c1; font-size: 1.1rem; margin-top: 10px; font-style: italic; animation: fadeIn 0.5s ease-in; font-weight: bold; text-shadow: 0 0 5px rgba(255,182,193,0.5); }
 
         #pass-input { padding: 12px 20px; font-size: 1.2rem; border-radius: 25px; border: 2px solid var(--cherry-red); background: rgba(255, 255, 255, 0.1); color: white; outline: none; text-align: center; font-family: 'Poppins', sans-serif; margin-bottom: 20px; transition: all 0.3s ease; width: 80%; max-width: 300px; display: block; margin: 0 auto 20px auto; }
         #pass-input:focus { background: rgba(255, 255, 255, 0.2); box-shadow: 0 0 15px rgba(210, 4, 45, 0.5); }
@@ -88,6 +89,7 @@
         #secret-wish:focus {
             background: rgba(255, 255, 255, 0.2); box-shadow: 0 0 25px rgba(210, 4, 45, 0.6);
         }
+        #secret-wish::placeholder { color: #ddd; }
 
         .cake-wrapper { position: relative; width: 220px; height: 180px; margin: 0 auto 30px auto; z-index: 10;}
         .plate { position: absolute; bottom: -10px; left: -15px; width: 250px; height: 40px; background: #e0e0e0; border-radius: 50%; box-shadow: 0 10px 15px rgba(0,0,0,0.6); border-bottom: 5px solid #ccc; z-index: 1; }
@@ -183,7 +185,7 @@
             font-family: 'Poppins', sans-serif; font-size: 1.05rem; 
             line-height: 1.8; color: #444; margin: 30px 0; font-weight: 500; 
         }
-        .cert-body p { margin-bottom: 18px; } /* Adding proper spaces between lines */
+        .cert-body p { margin-bottom: 18px; } 
         
         .highlight-title { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: #d2042d; display: inline-block; margin-top: 5px;}
         .highlight-text { font-weight: 700; color: #99001f; }
@@ -240,12 +242,26 @@
             <p class="question-text">Name of your favourite food?</p>
             
             <div class="hint-container">
-                Stuck? Click for a hint! <button class="hint-btn" onclick="toggleHint()" title="Click for a hint">❓</button>
+                Stuck? Click for a hint! <button class="hint-btn" onclick="toggleHint(1)" title="Click for a hint">❓</button>
             </div>
-            <p id="pass-hint">Hint: That spicy street food you always eat... 🌶️
-                (start with letter 'P')</p>
+            
+            <div id="hint-1-wrapper" style="display: none;">
+                <p class="hint-text-reveal">
+                    The street food you always eat… pani is the main hero 😋 guess karo
+                </p>
+                <div style="margin-top: 15px; font-size: 0.95rem; color: #ccc;">
+                    Sach me itna tough hai kya 😭 chalo ek aur hint… ab to pakka guess ho jan chahiye 😏
+                    <button class="hint-btn" onclick="toggleHint(2)" title="Click for another hint">❓</button>
+                </div>
+            </div>
 
-            <input type="text" id="pass-input" placeholder="Type here..." autocomplete="off">
+            <div id="hint-2-wrapper" style="display: none;">
+                <p class="hint-text-reveal">
+                    Starts with letter P 😆
+                </p>
+            </div>
+
+            <input type="text" id="pass-input" placeholder="Type here..." autocomplete="off" spellcheck="false">
             <button class="switch-btn" onclick="checkPassword()">Unlock & Enter 🔓</button>
             <p id="error-msg">Oops! Wrong answer! 🤭 Try again!</p>
         </div>
@@ -273,7 +289,8 @@
 
         <div id="cake-section">
             <div id="wish-container" style="position: relative; display: flex; justify-content: center; align-items: center; min-height: 60px; margin-bottom: 30px;">
-                <input type="password" id="secret-wish" placeholder="Type your secret wish here..." autocomplete="off" style="margin-bottom: 0;">
+                <!-- Changed type to "text" so she can see the wish clearly -->
+                <input type="text" id="secret-wish" placeholder="Type your secret wish here..." autocomplete="off" style="margin-bottom: 0;">
                 <div id="wish-gift-box">🎁</div>
             </div>
 
@@ -356,7 +373,6 @@
                 <div class="cert-name">Tatatae0</div>
                 
                 <div class="cert-body">
-                    <!-- ADDED PROPER PARAGRAPH FORMATTING HERE -->
                     <p>Yeh praman patra officially declare karta hai ki aap iss saal ki <br>
                     <span class="highlight-title">Certified Debate Lover 🗣️ & Novel Queen 📚</span> ho! 😂</p>
                     
@@ -456,9 +472,15 @@
             inner.style.transform = inner.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
         });
 
-        function toggleHint() {
-            const hint = document.getElementById('pass-hint');
-            hint.style.display = hint.style.display === 'block' ? 'none' : 'block';
+        // Updated Hint function
+        function toggleHint(level) {
+            if (level === 1) {
+                const hint1 = document.getElementById('hint-1-wrapper');
+                hint1.style.display = hint1.style.display === 'block' ? 'none' : 'block';
+            } else if (level === 2) {
+                const hint2 = document.getElementById('hint-2-wrapper');
+                hint2.style.display = hint2.style.display === 'block' ? 'none' : 'block';
+            }
         }
 
         function checkPassword() {
@@ -528,13 +550,46 @@
         function blowOutCandle(candleElement) {
             const flameElement = candleElement.querySelector('.flame');
             if (!flameElement || flameElement.classList.contains('extinguished')) return;
+            
+            const secretWish = document.getElementById('secret-wish');
+            
+            // MAGIC WISH VALIDATION 🔥
+            if (blownOutCandles === 2 && secretWish.value.trim() === '') {
+                let cuteMsg = document.getElementById('cute-wish-msg');
+                if(!cuteMsg) {
+                    cuteMsg = document.createElement('p');
+                    cuteMsg.id = 'cute-wish-msg';
+                    cuteMsg.innerText = "Arey wait! 🛑 Pehle ek pyara sa wish toh maang lo jaldi se! ✨ Uske bina last candle bujhne nahi wali 😜";
+                    cuteMsg.style.color = "#ffb6c1";
+                    cuteMsg.style.fontWeight = "bold";
+                    cuteMsg.style.marginTop = "10px";
+                    cuteMsg.style.animation = "shake 0.4s ease";
+                    document.getElementById('cake-instruction').parentNode.insertBefore(cuteMsg, document.getElementById('cake-instruction').nextSibling);
+                } else {
+                    cuteMsg.style.animation = "none";
+                    void cuteMsg.offsetWidth; 
+                    cuteMsg.style.animation = "shake 0.4s ease";
+                }
+                
+                secretWish.style.border = "2px solid #ff4d6d";
+                secretWish.style.boxShadow = "0 0 20px #ff4d6d";
+                secretWish.focus();
+                playErrorSound();
+                return; // Prevent blowing out the 3rd candle!
+            }
+            
+            // Clean up the warning if they now filled it
+            let cuteMsg = document.getElementById('cute-wish-msg');
+            if(cuteMsg) cuteMsg.remove();
+            secretWish.style.border = "2px solid var(--cherry-red)";
+
+            // Actually blow out
             flameElement.classList.add('extinguished'); candleElement.style.pointerEvents = 'none'; 
             blownOutCandles++; playPopSound();
 
             if (blownOutCandles === 3) {
                 document.getElementById('cake-instruction').innerText = "Yay! Happy Birthday! 🥳";
 
-                const secretWish = document.getElementById('secret-wish');
                 const giftBox = document.getElementById('wish-gift-box');
 
                 if(secretWish && giftBox) {
