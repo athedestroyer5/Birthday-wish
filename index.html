@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Palak</title>
     
+    <!-- Preloading both images for smooth switching -->
+    <link rel="preload" href="tata1.jpg" as="image">
     <link rel="preload" href="tata.jpg" as="image">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -67,10 +69,33 @@
         .flip-box-inner { width: 250px; height: 250px; text-align: center; transition: transform 0.8s; transform-style: preserve-3d; border-radius: 50%; box-shadow: 0 0 30px rgba(210, 4, 45, 0.5); animation: pulseFrame 3s infinite alternate; }
         .photo-container:hover .flip-box-inner { transform: rotateY(180deg); }
         .flip-box-front, .flip-box-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 50%; border: 5px solid var(--cherry-red); padding: 8px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
-        .flip-box-front img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .flip-box-front img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; transition: opacity 0.3s ease; }
         .flip-box-back { transform: rotateY(180deg); background: var(--cherry-red); color: white; display: flex; align-items: center; justify-content: center; font-family: 'Dancing Script', cursive; font-size: 3rem; position: relative; }
         .flip-box-back img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; opacity: 0.3; z-index: 1; transition: opacity 0.5s ease-in-out; }
         .flip-box-back span { z-index: 2; position: relative; text-shadow: 2px 2px 5px rgba(0,0,0,0.8); }
+
+        /* 🔥 NEW SWITCH PHOTO BUTTON STYLE 🔥 */
+        .switch-photo-btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: #bfa4d8;
+            border: 1px solid #bfa4d8;
+            padding: 6px 18px;
+            font-size: 0.9rem;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            animation: dropDown 1.7s ease-out;
+            z-index: 20;
+            backdrop-filter: blur(5px);
+        }
+        .switch-photo-btn:hover {
+            background: #bfa4d8;
+            color: #000;
+            box-shadow: 0 0 15px rgba(191, 164, 216, 0.6);
+            transform: translateY(-2px);
+        }
 
         h1 { font-family: 'Dancing Script', cursive; font-size: 4rem; margin-top: 20px; color: var(--cherry-red); text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); text-align: center;}
         .nickname { font-size: 1.5rem; color: #bfa4d8; margin-bottom: 20px; letter-spacing: 2px; }
@@ -278,7 +303,7 @@
             
             <div id="hint-1-wrapper" style="display: none;">
                 <p class="hint-text-reveal">
-                    The street food you always eat… pani is the main hero 😋 guess karo
+                    The street food you always eat…guess karo
                 </p>
                 <div style="margin-top: 15px; font-size: 0.95rem; color: #ccc;">
                     Sach me itna tough hai kya 😭 chalo ek aur hint… ab to pakka guess ho jan chahiye 😏
@@ -302,7 +327,7 @@
         <div class="photo-container" tabindex="0">
             <div class="flip-box-inner">
                 <div class="flip-box-front">
-                    <img src="tata.jpg" alt="Palak" onerror="this.src='https://via.placeholder.com/250/D2042D/FFFFFF?text=Palak'">
+                    <img id="front-photo" src="tata1.jpg" alt="Palak" onerror="this.src='https://via.placeholder.com/250/D2042D/FFFFFF?text=Palak'">
                 </div>
                 <div class="flip-box-back"> 
                     <img id="carousel-img" src="https://via.placeholder.com/250/99001f/FFFFFF?text=Memory+1" alt="Memories">
@@ -310,6 +335,9 @@
                 </div>
             </div>
         </div>
+        
+        <!-- NEW PHOTO SWITCH BUTTON -->
+        <button class="switch-photo-btn" onclick="toggleFrontPhoto(event)">📸 Switch Photo</button>
 
         <h1>Happy Birthday Palak</h1>
         <div class="nickname">aka tatatae0</div>
@@ -510,6 +538,29 @@
             const inner = this.querySelector('.flip-box-inner');
             inner.style.transform = inner.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
         });
+
+        // 🔥 LOGIC TO SWITCH PHOTOS ON FRONT 🔥
+        let isDefaultPhoto = true;
+        function toggleFrontPhoto(event) {
+            if (event) event.stopPropagation(); // Prevents flipping the card accidentally
+            const photo = document.getElementById('front-photo');
+            
+            // Fade out
+            photo.style.opacity = '0';
+            
+            setTimeout(() => {
+                if (isDefaultPhoto) {
+                    photo.src = 'tata.jpg';
+                } else {
+                    photo.src = 'tata1.jpg';
+                }
+                isDefaultPhoto = !isDefaultPhoto;
+                // Fade back in
+                photo.style.opacity = '1';
+            }, 300);
+            
+            playPopSound();
+        }
 
         function toggleHint(level) {
             if (level === 1) {
