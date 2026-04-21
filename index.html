@@ -30,14 +30,16 @@
             min-height: 100vh;
             transition: background 1.5s ease-in-out;
             cursor: url('https://img.icons8.com/fluency/24/magic-wand.png'), auto;
-            /* FIXED: Removed opacity: 0 here so the screen doesn't go blank when animation changes */
-            animation: initialFadeIn 1.5s ease-in; 
+            /* PERFECT FADE IN FIX */
+            opacity: 0;
+            animation: initialFadeIn 1.5s ease-in forwards; 
         }
 
         body.lights-on {
+            opacity: 1 !important; /* Prevents screen from going black */
             background: linear-gradient(135deg, var(--black-lavender-1), var(--black-lavender-2), var(--black-lavender-1));
             background-size: 200% 200%;
-            background-attachment: fixed; /* SMOOTH SCROLLING FIX */
+            background-attachment: fixed;
             animation: gradientShift 10s ease infinite;
         }
 
@@ -60,7 +62,6 @@
         #pass-input { padding: 12px 20px; font-size: 1.2rem; border-radius: 25px; border: 2px solid var(--cherry-red); background: rgba(255, 255, 255, 0.1); color: white; outline: none; text-align: center; font-family: 'Poppins', sans-serif; margin-bottom: 20px; transition: all 0.3s ease; width: 80%; max-width: 300px; display: block; margin: 0 auto 20px auto; }
         #pass-input:focus { background: rgba(255, 255, 255, 0.2); box-shadow: 0 0 15px rgba(210, 4, 45, 0.5); }
 
-        /* BUTTON PULSE ANIMATION ADDED HERE */
         .switch-btn { background: transparent; color: #fff; border: 2px solid #fff; padding: 12px 35px; font-size: 1.2rem; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; font-family: 'Poppins', sans-serif; animation: softPulse 2.5s infinite ease-in-out; }
         .switch-btn:hover { background: #fff; color: #000; box-shadow: 0 0 30px rgba(255,255,255,0.8); animation: none; transform: scale(1.05); }
 
@@ -89,7 +90,6 @@
 
         .message-box { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 25px; max-width: 600px; text-align: center; margin: 15px 0; line-height: 1.6; font-size: 1.1rem; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); display: none; min-height: 80px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
 
-        /* TYPEWRITER CURSOR FIX */
         .cursor { display: inline-block; width: 8px; animation: blink 0.8s infinite; color: var(--cherry-red); font-weight: bold; }
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
 
@@ -129,7 +129,6 @@
         .gift-card.clickable-card:hover, .gift-card.clickable-card:focus { background: rgba(210, 4, 45, 0.15); border-color: rgba(255,255,255,0.4); }
         .gift-card.clickable-card:not(#gift-card-4):hover { transform: translateY(-10px); box-shadow: 0 10px 25px rgba(210, 4, 45, 0.4); }
         
-        /* TOUCH ACTION FIX FOR DODGING GIFT */
         #gift-card-4 { touch-action: none; }
 
         .gift-icon img { width: 70px; animation: bounce 3s infinite; }
@@ -173,7 +172,6 @@
         .bite-mark { position: absolute; background: var(--modal-bg); border-radius: 50%; pointer-events: none; z-index: 100; transform: scale(0); animation: bitePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         .cake-shake-anim { animation: shakeCake 0.3s ease; }
 
-        /* CERTIFICATE STYLES */
         #cert-modal {
             position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 3000; display: none;
             justify-content: center; align-items: flex-start; padding: 40px 20px; 
@@ -219,7 +217,6 @@
             border: 3px solid #d4af37; z-index: 10; position: relative; text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
         }
 
-        /* CUTE MODAL STYLES */
         #cute-wish-modal {
             position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
             z-index: 4000; display: none; justify-content: center; align-items: center; padding: 20px;
@@ -267,13 +264,11 @@
             .cert-footer { flex-direction: column; align-items: center; text-align: center; gap: 20px; margin-top: 20px; padding: 0; }
             .wax-seal { margin: 10px auto; width: 90px; height: 90px; font-size: 1.1rem; }
             
-            /* CAKE BITE SCALE MOBILE FIX */
             #big-cake-container { transform: scale(1.2); }
             #big-cake-container:active { transform: scale(1.1); }
             .cake-shake-anim { animation: shakeCakeMobile 0.3s ease !important; }
         }
 
-        /* NEW ANIMATIONS */
         @keyframes initialFadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
         
         @keyframes softPulse {
@@ -288,6 +283,7 @@
             100% { opacity: 1; transform: scale(1); box-shadow: 0 0 40px rgba(255, 215, 0, 0.4); }
         }
 
+        @keyframes popInCenter { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.1); } }
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
         @keyframes dropDown { 0% { transform: translateY(-50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
@@ -334,7 +330,8 @@
                 <p class="hint-text-reveal">Starts with letter P 😆</p>
             </div>
 
-            <input type="text" id="pass-input" placeholder="Type here..." autocomplete="off" spellcheck="false">
+            <!-- FIXED: Autocapitalize off so mobile keyboards don't mess up the password -->
+            <input type="text" id="pass-input" placeholder="Type here..." autocomplete="off" spellcheck="false" autocapitalize="none" autocorrect="off">
             <button class="switch-btn" onclick="checkPassword()">Unlock & Enter 🔓</button>
             <p id="error-msg">Oops! Wrong answer! 🤭 Try again!</p>
         </div>
@@ -363,7 +360,7 @@
 
         <div id="cake-section">
             <div id="wish-container" style="position: relative; display: flex; justify-content: center; align-items: center; min-height: 60px; margin-bottom: 30px;">
-                <input type="text" id="secret-wish" placeholder="Type your secret wish here..." autocomplete="off" style="margin-bottom: 0;">
+                <input type="text" id="secret-wish" placeholder="Type your secret wish here..." autocomplete="off" style="margin-bottom: 0;" autocapitalize="sentences">
                 <div id="wish-gift-box">🎁</div>
             </div>
 
@@ -643,7 +640,6 @@
             }, 800);
         }
 
-        /* FIXED TYPEWRITER WITH CURSOR */
         async function startTypewriter() {
             const msg1 = document.getElementById('msg1'); const msg2 = document.getElementById('msg2');
             await typeText(msg1, 35); await new Promise(r => setTimeout(r, 500)); await typeText(msg2, 35);
@@ -679,6 +675,7 @@
             const modal = document.getElementById('cute-wish-modal');
             modal.style.display = 'flex';
         }
+        
         function closeCuteModal() {
             playPopSound();
             const modal = document.getElementById('cute-wish-modal');
@@ -791,7 +788,6 @@
             }
         }
 
-        /* FIXED RETINA SCRATCH CARD */
         function initScratchCard(canvasId, cardElement) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -832,7 +828,6 @@
             let checkCounter = 0;
             function checkScratched() {
                 checkCounter++; if(checkCounter % 5 !== 0) return; 
-                // Must check actual canvas dimensions here
                 const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
                 let cleared = 0;
                 for(let i = 3; i < pixels.length; i += 40) { if(pixels[i] === 0) cleared++; }
@@ -851,14 +846,17 @@
         const gift4 = document.getElementById('gift-card-4');
         function handleDodge(e) {
             if(!gift4.classList.contains('opened') && gift4Dodges < 3) {
-                if(e.cancelable) e.preventDefault(); 
+                if (e.type === 'touchstart' && e.cancelable) {
+                    e.preventDefault(); // Only prevent click on the first 3 touches so it properly dodges
+                }
                 const randomX = (Math.random() - 0.5) * 200; const randomY = (Math.random() - 0.5) * 200;
                 gift4.style.transform = `translate(${randomX}px, ${randomY}px)`; gift4Dodges++;
             } else if (gift4Dodges >= 3 && !gift4.classList.contains('opened')) {
                 gift4.style.transform = `translate(0px, -10px)`;
             }
         }
-        gift4.addEventListener('mouseenter', handleDodge); gift4.addEventListener('touchstart', handleDodge, {passive: false});
+        gift4.addEventListener('mouseenter', handleDodge); 
+        gift4.addEventListener('touchstart', handleDodge, {passive: false});
 
         function openNormalGift(card) {
             if (card.id === 'gift-card-4' && gift4Dodges < 3) return;
@@ -875,7 +873,6 @@
 
             if (openedGiftsCount === 4) {
                 setTimeout(() => {
-                    // NEW POP IN AND GLOW ANIMATION TRIGGERED HERE
                     document.getElementById('secret-message').style.display = 'block'; 
                     document.getElementById('secret-message').style.animation = 'popInGlow 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
                     
@@ -918,10 +915,13 @@
         }
 
         function takeBite(event) {
-            if(cakeBites >= 6) return; playEatCrunch();
+            if(cakeBites >= 6) return; 
+            playEatCrunch();
             const cakeContainer = document.getElementById('big-cake-container');
             cakeContainer.classList.remove('cake-shake-anim'); void cakeContainer.offsetWidth; cakeContainer.classList.add('cake-shake-anim');
-            const rect = event.currentTarget.getBoundingClientRect(); const x = event.clientX - rect.left; const y = event.clientY - rect.top;
+            
+            const rect = event.currentTarget.getBoundingClientRect(); 
+            const x = event.clientX - rect.left; const y = event.clientY - rect.top;
 
             const bite = document.createElement('div'); bite.classList.add('bite-mark');
             const size = Math.random() * 50 + 60; bite.style.width = size + 'px'; bite.style.height = size + 'px';
@@ -940,7 +940,6 @@
         function showCertificate() { const cert = document.getElementById('cert-modal'); cert.style.display = 'flex'; setTimeout(() => { cert.style.opacity = '1'; shootBigConfetti(); playPopSound(); }, 100); }
         function closeCertificate() { playPopSound(); const cert = document.getElementById('cert-modal'); cert.style.opacity = '0'; setTimeout(() => { cert.style.display = 'none'; }, 800); }
 
-        /* FIXED INSTAGRAM / MOBILE SCROLL DOWNLOAD */
         function downloadCertificate() {
             playPopSound(); 
             const certBox = document.getElementById('certificate-content');
@@ -954,30 +953,24 @@
                 backgroundColor: "#fffcf2", 
                 windowWidth: document.documentElement.offsetWidth,
                 windowHeight: document.documentElement.offsetHeight,
-                scrollY: -window.scrollY // Fixes mobile scrolling cut-off bug
+                scrollY: -window.scrollY
             }).then(canvas => {
                 const imgData = canvas.toDataURL('image/png');
                 
-                // Detection for Instagram / Facebook / iOS built-in browsers
                 const ua = navigator.userAgent || navigator.vendor || window.opera;
                 const isInstagram = (ua.indexOf('Instagram') > -1) || (ua.indexOf('FBAN') > -1);
                 
                 if (isInstagram || /iPhone|iPad|iPod/i.test(ua)) {
-                    // Instagram Fallback: Convert HTML into an actual Image on screen
                     certBox.innerHTML = `
                         <p style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.1rem; text-align: center; margin-bottom: 20px; text-shadow: none;">
                             👇 <b>Long-press</b> the image below and select <b>"Save to Photos"</b>! 👇
                         </p>
                         <img src="${imgData}" style="width: 100%; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.5);" alt="Certificate">
                     `;
-                    // Remove the box styling so the image looks clean
-                    certBox.style.background = 'transparent';
-                    certBox.style.border = 'none';
-                    certBox.style.boxShadow = 'none';
-                    certBox.style.padding = '0';
-                    downloadBtn.style.display = 'none'; // Hide download button as it's no longer needed
+                    certBox.style.background = 'transparent'; certBox.style.border = 'none';
+                    certBox.style.boxShadow = 'none'; certBox.style.padding = '0';
+                    downloadBtn.style.display = 'none'; 
                 } else {
-                    // Standard Download for Android / Desktop Chrome
                     const link = document.createElement('a'); 
                     link.download = 'Palak_Certificate.png';
                     link.href = imgData; 
